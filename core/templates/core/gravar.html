@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/gravar.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+{% endblock %}
+{% block content %}
+<main class="container-principal" data-upload-url="{% url 'enviar_video' %}">
+  <div class="hero-treino">
+      <h1 class="titulo-principal">Treine suas Apresentações</h1>
+      <p class="subtitulo">Pratique suas habilidades de apresentação e receba feedback detalhado.</p>
+  </div>
+
+  <div class="container-gravacao">
+    <h2>Gravar Apresentação</h2>
+    <p class="instrucoes">Posicione-se em um ambiente bem iluminado e com pouco ruído.</p>
+
+    <div class="form-campos">
+        {% csrf_token %}
+        <input type="text" placeholder="Tema da apresentação" class="input-tema" id="tema-gravacao">
+
+        <select class="select-tipo" id="tipo-apresentacao">
+            <option value="" disabled selected>Selecione o tipo de apresentação</option>
+            <option value="tcc">TCC</option>
+            <option value="palestra_tecnica">Palestra Técnica</option>
+            <option value="videoaula">Videoaula</option>
+            <option value="palestra_motivacional">Palestra Motivacional</option>
+            <option value="pitch_comercial">Pitch Comercial</option>
+            <option value="pitch_startup">Pitch de Startup</option>
+            <option value="explicacao_escolar">Apresentação Escolar</option>
+            <option value="livre">Apresentação Livre</option>
+        </select>
+
+        <textarea class="input-contexto" id="contexto-gravacao" placeholder="Explique brevemente o tema da sua apresentação (opcional)"></textarea>
+    </div>
+
+    <div class="tela-gravacao" id="tela-gravacao"></div>
+
+    <p class="timer" id="timer">00:00</p>
+
+    <div class="botoes-controle">
+      <button class="btn btn-iniciar" id="btn-iniciar">
+        <i class="fas fa-play-circle"></i> Iniciar Gravação
+      </button>
+      <button class="btn btn-parar" id="btn-parar">
+        <i class="fas fa-stop-circle"></i> Parar Gravação
+      </button>
+      <a href="{% url 'treino' %}" class="btn btn-voltar" id="btn-voltar">
+        <i class="fas fa-arrow-left"></i> Voltar
+      </a>
+    </div>
+  </div>
+</main>
+
+<div id="loader-sala" class="loader-sala">
+    <div class="loader-box">
+        <div class="loader-title">Processando...</div>
+        <div class="loader-bar"><div class="loader-progress" id="loader-progress"></div></div>
+        <div class="loader-percent" id="loader-percent">0%</div>
+    </div>
+</div>
+
+<script src="{% static 'js/gravar.js' %}" defer></script>
+{% endblock %}

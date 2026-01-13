@@ -1,0 +1,542 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/relatorio.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+{% endblock %}
+
+{% block content %}
+{% with dados=relatorio.dados_json %}
+{% with scores=dados.scores fb=dados.feedback_gemini ling=dados.linguagem contrib=dados.scores_contribuicoes %}
+
+<main class.="container-principal">
+
+    <section class="report-hero">
+        <div class="container">
+            <div class="report-hero-content">
+                <h1 class="fade-in">Relatório da Sua Apresentação</h1>
+                <p class="fade-in hero-subtitle">
+                    Tema analisado: <strong>{{ dados.tema_fornecido }}</strong>
+                </p>
+
+                <div class="hero-score-wrapper fade-in">
+                    <div class="overall-score">
+                        {{ dados.final_score|floatformat:1 }}
+                    </div>
+                    <div class="overall-info">
+                        {% with nota=dados.final_score %}
+                            <div class="score-label">
+                                {% if nota >= 8 %}
+                                    Sua apresentação foi classificada como <strong>Excelente</strong>
+                                {% elif nota >= 6 %}
+                                    Sua apresentação foi classificada como <strong>Boa</strong>
+                                {% elif nota >= 4 %}
+                                    Sua apresentação foi classificada como <strong>Mediana</strong>
+                                {% else %}
+                                    Sua apresentação foi classificada como <strong>Precisa de melhora</strong>
+                                {% endif %}
+                            </div>
+                        {% endwith %}
+                        <p class="score-explainer">
+                            Esta nota junta vários pontos: velocidade, foco no tema, clareza, concentração e variação da voz.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="summary-section">
+        <div class="container">
+            <h2 class="fade-in">Como foi a sua apresentação em palavras simples</h2>
+
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <div class="summary-icon">
+                        <i class="fas fa-thumbs-up"></i>
+                    </div>
+                    <h3 class="summary-title">O que você fez bem</h3>
+                    <p class="summary-text">
+                        {% if fb.feedback_curto and fb.feedback_curto.0 %}
+                            {{ fb.feedback_curto.0 }}
+                        {% else %}
+                            A análise encontrou pontos positivos importantes na sua forma de falar e na forma como explicou o tema.
+                        {% endif %}
+                    </p>
+                </div>
+
+                <div class="summary-card">
+                    <div class="summary-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h3 class="summary-title">O principal ponto para melhorar</h3>
+                    <p class="summary-text">
+                        {% if fb.principais_falhas and fb.principais_falhas.0 %}
+                            {{ fb.principais_falhas.0 }}
+                        {% else %}
+                            Existe pelo menos um ponto da sua fala que pode ser treinado para deixar a apresentação mais clara e organizada.
+                        {% endif %}
+                    </p>
+                </div>
+
+                <div class="summary-card">
+                    <div class="summary-icon">
+                        <i class="fas fa-stopwatch"></i>
+                    </div>
+                    <h3 class="summary-title">Resumo em números fáceis</h3>
+                    <p class="summary-text">
+                        Você falou em média <strong>{{ dados.wpm_real|floatformat:0 }} palavras por minuto</strong>
+                        e ficou focado no tema em boa parte do tempo
+                        (medida de foco: <strong>{{ dados.tangencia_sim|floatformat:3 }}</strong>).
+                    </p>
+                </div>
+            </div>
+
+            <div class="fade-in summary-detailed">
+                <h3>Resumo geral</h3>
+                <p>
+                    {% if fb.resumo_geral %}
+                        {{ fb.resumo_geral|linebreaks }}
+                    {% else %}
+                        Este resumo foi gerado automaticamente com base em toda a análise da apresentação.
+                    {% endif %}
+                </p>
+            </div>
+            {% if dados.contexto_apresentacao %}
+            <section class="summary-section contexto-section fade-in">
+                <div class="container">
+                    <h2>Contexto da Apresentação</h2>
+                    <div class="contexto-box">
+                        <p>{{ dados.contexto_apresentacao|linebreaks }}</p>
+                    </div>
+                </div>
+            </section>
+            {% endif %}
+        </div>
+    </section>
+
+    
+    <section class="summary-section tipo-discurso-section">
+        <div class="container">
+            <h2 class="fade-in">Como sua nota foi calculada</h2>
+            <div class="tipo-discurso-card">
+                <div class="tipo-discurso-icon">
+                    <i class="fas fa-calculator"></i>
+                </div>
+                <div class="tipo-discurso-content">
+                    {% if dados.tipo_discurso == 'tcc' %}
+                        <h3>Você escolheu: TCC</h3>
+                        <p>Para um TCC, o foco do cálculo está no <strong>Conteúdo</strong>. Demos o peso máximo para <strong>Foco no Tema (30%)</strong> e <strong>Clareza (30%)</strong>. A sua Variação da Voz (15%) e Velocidade (15%) são importantes, mas a Concentração (10%) tem o menor impacto.</p>
+
+                    {% elif dados.tipo_discurso == 'palestra_tecnica' or dados.tipo_discurso == 'videoaula' %}
+                        <h3>Você escolheu: Palestra Técnica / Videoaula</h3>
+                        <p>Para uma Palestra Técnica, o mais importante é o <strong>Conteúdo Técnico</strong>. Demos o peso máximo para <strong>Foco no Tema (35%)</strong>. Clareza (20%) e Velocidade (20%) também são cruciais, enquanto Concentração (10%) e Variação da Voz (15%) têm menor impacto.</p>
+
+                    {% elif dados.tipo_discurso == 'palestra_motivacional' %}
+                        <h3>Você escolheu: Palestra Motivacional</h3>
+                        <p>Para motivar, o foco está na <strong>Energia e Execução</strong>. Demos o peso máximo para <strong>Variação da Voz (30%)</strong> e <strong>Velocidade (25%)</strong>. O Foco no Tema (10%) é menos importante, e a Concentração (15%) tem uma penalidade mais branda.</p>
+
+                    {% elif dados.tipo_discurso == 'pitch_comercial' or dados.tipo_discurso == 'pitch_startup' %}
+                        <h3>Você escolheu: Pitch Comercial / Startup</h3>
+                        <p>Para um Pitch, o foco é <strong>Persuasão e Energia</strong>. Demos o peso máximo para <strong>Variação da Voz (30%)</strong> e <strong>Velocidade (30%)</strong>. O Foco no Tema (10%) é menos relevante, e a penalidade por Concentração (10%) é mais branda.</p>
+
+                    {% elif dados.tipo_discurso == 'explicacao_escolar' %}
+                        <h3>Você escolheu: Apresentação Escolar</h3>
+                        <p>Este é um cálculo <strong>Equilibrado</strong>. Exige que você se saia bem em todas as áreas. Damos pesos importantes para <strong>Clareza (25%)</strong>, <strong>Foco no Tema (20%)</strong> e controle da <strong>Concentração (20%)</strong>.</p>
+
+                    {% else %} 
+                        <h3>Você escolheu: Apresentação Livre</h3>
+                        <p>Este é o modo <strong>Equilibrado</strong>. Todos os 5 critérios (Velocidade, Foco no Tema, Clareza, Concentração e Variação da Voz) têm exatamente o mesmo peso de <strong>20%</strong> cada. Uma nota boa aqui exige equilíbrio em todas as áreas.</p>
+
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="summary-section friendly-section">
+        <div class="container">
+            <h2 class="fade-in">Como a sua fala foi analisada</h2>
+            <div class="friendly-grid">
+
+                {% with s=scores.velocidade c=contrib.velocidade %}
+                <div class="friendly-card">
+                    <h3>Velocidade de fala</h3>
+                    <p class="friendly-value">
+                        Média de <strong>{{ dados.wpm_real|floatformat:0 }} palavras por minuto</strong>
+                        (nota {{ s|floatformat:1 }} de 10).
+                    </p>
+                    <p class="friendly-text">
+                        {% if s < 6 %}
+                            Você falou rápido o suficiente para dificultar a compreensão em alguns momentos.
+                        {% elif s < 8 %}
+                            O ritmo ficou aceitável para a maior parte da apresentação.
+                        {% else %}
+                            O ritmo foi excelente e confortável para quem estava ouvindo.
+                        {% endif %}
+                    </p>
+                    {% load matematica %}
+                    <p class="friendly-contrib">
+                        Esta parte ajudou com <strong>{{ c|mul10|floatformat:2 }}</strong> pontos na nota final.
+                    </p>
+                    <p class="friendly-extra">
+                        A velocidade sozinha não define se a apresentação é boa ou ruim. Aqui o objetivo é
+                        encontrar um ritmo que permita que o público acompanhe o conteúdo sem pressa excessiva
+                        nem lentidão que deixe a explicação cansativa.
+                    </p>
+                </div>
+                {% endwith %}
+
+                {% with s=scores.tangencia c=contrib.tangencia %}
+                <div class="friendly-card">
+                    <h3>Foco no tema</h3>
+                    <p class="friendly-value">
+                        Medida de foco: <strong>{{ dados.tangencia_sim|floatformat:3 }}</strong>
+                        (nota {{ s|floatformat:1 }} de 10).
+                    </p>
+                    <p class="friendly-text">
+                        {% if s < 6 %}
+                            Você se afastou do tema em alguns trechos.
+                        {% else %}
+                            Você manteve bom alinhamento com o tema durante a maior parte da fala.
+                        {% endif %}
+                    </p>
+                    <p class="friendly-contrib">
+                        Esta parte ajudou com <strong>{{ c|mul10|floatformat:2 }}</strong> pontos na nota final.
+                    </p>
+                    <p class="friendly-extra">
+                        Este critério mede quanto do que você falou realmente tem relação com o tema proposto.
+                        Quanto maior essa nota, mais a sua fala permanece organizada em torno do assunto principal,
+                        sem desviar para histórias que não ajudam a explicar o conteúdo.
+                    </p>
+                </div>
+                {% endwith %}
+
+                {% with s=scores.clareza c=contrib.clareza %}
+                <div class="friendly-card">
+                    <h3>Clareza ao explicar</h3>
+                    <p class="friendly-value">
+                        Nota de clareza: <strong>{{ s|floatformat:1 }} de 10</strong>
+                    </p>
+                    <p class="friendly-text">
+                        {% if s < 6 %}
+                            Foram detectadas repetições, vícios de linguagem ou frases confusas.
+                        {% else %}
+                            Suas frases foram claras e diretas na maior parte do tempo.
+                        {% endif %}
+                    </p>
+                    <p class="friendly-contrib">
+                        Esta parte ajudou com <strong>{{ c|mul10|floatformat:2 }}</strong> pontos na nota final.
+                    </p>
+                    <p class="friendly-extra">
+                        Clareza está ligada à forma como as ideias são organizadas. Frases mais curtas,
+                        exemplos bem escolhidos e menos vícios de linguagem facilitam para a banca entender
+                        exatamente o que você quis dizer.
+                    </p>
+                </div>
+                {% endwith %}
+
+                {% with s=scores.nervosismo c=contrib.nervosismo %}
+                <div class="friendly-card">
+                    <h3>Nível de concentração</h3>
+                    <p class="friendly-value">
+                        Nota de concentração: <strong>{{ s|floatformat:1 }} de 10</strong>
+                    </p>
+                    <p class="friendly-text">
+                        {% if s < 6 %}
+                            Houve sinais perceptíveis de falta de concentração, mas nada fora do normal.
+                        {% else %}
+                            Você manteve boa concentração durante a apresentação.
+                        {% endif %}
+                    </p>
+                    <p class="friendly-contrib">
+                        Esta parte ajudou com <strong>{{ c|mul10|floatformat:2 }}</strong> pontos na nota final.
+                    </p>
+                    <p class="friendly-extra">
+                        Sinais de falta de concentração são comuns em apresentações. Este critério observa
+                        repetições rápidas, correções e pausas truncadas para estimar como a concentração
+                        apareceu na sua fala e quanto isso impactou a fluidez.
+                    </p>
+                </div>
+                {% endwith %}
+
+                {% with s=scores.prosodia c=contrib.prosodia %}
+                <div class="friendly-card">
+                    <h3>Variação da voz</h3>
+                    <p class="friendly-value">
+                        Nota de entonação: <strong>{{ s|floatformat:1 }} de 10</strong>
+                    </p>
+                    <p class="friendly-text">
+                        {% if s < 6 %}
+                            A fala ficou monótona em alguns momentos.
+                        {% else %}
+                            A variação de tom tornou a fala mais interessante.
+                        {% endif %}
+                    </p>
+                    <p class="friendly-contrib">
+                        Esta parte ajudou com <strong>{{ c|mul10|floatformat:2 }}</strong> pontos na nota final.
+                    </p>
+                    <p class="friendly-extra">
+                        A prosódia avalia se sua voz sobe e desce em momentos importantes, se faz pausas
+                        estratégicas e se evita um tom único do começo ao fim. Isso deixa a apresentação
+                        mais envolvente para quem está ouvindo.
+                    </p>
+                </div>
+                {% endwith %}
+
+            </div>
+        </div>
+    </section>
+
+    <section class="comparison-section">
+        <div class="container">
+            <h2 class="fade-in">Detalhes sobre o uso das palavras</h2>
+
+            <div class="linguagem-grid">
+
+                <div class="linguagem-item">
+                    <span class="metric-label">Variedade de palavras</span>
+                    <span class="metric-value">{{ ling.token_diversity|floatformat:3 }}</span>
+                    <p class="metric-explain">
+                        Mede quanta variedade você usou no vocabulário.
+                        Valores baixos indicam que muitas palavras se repetiram.
+                    </p>
+                    <p class="metric-explain">
+                        {% if ling.token_diversity < 0.40 %}
+                            Você falou de forma repetitiva. Tente incluir mais termos diferentes.
+                        {% elif ling.token_diversity < 0.60 %}
+                            Seu vocabulário foi razoável, mas ainda dá pra melhorar.
+                        {% else %}
+                            Boa variedade. Sua fala manteve diversidade de palavras.
+                        {% endif %}
+                    </p>
+                </div>
+
+                <div class="linguagem-item">
+                    <span class="metric-label">Repetição de ideias</span>
+                    <span class="metric-value">{{ ling.semantic_redundancy|floatformat:3 }}</span>
+                    <p class="metric-explain">
+                        Representa o quanto você repetiu conceitos parecidos.
+                        Quanto mais alto, mais redundante a fala.
+                    </p>
+                    <p class="metric-explain">
+                        {% if ling.semantic_redundancy > 0.75 %}
+                            Você repetiu muitas ideias. Organizar a fala antes ajuda a evitar isso.
+                        {% elif ling.semantic_redundancy > 0.50 %}
+                            Alguma repetição foi percebida, mas nada crítico.
+                        {% else %}
+                            Ótimo domínio: quase nenhuma ideia foi repetida.
+                        {% endif %}
+                    </p>
+                </div>
+
+                <div class="linguagem-item">
+                    <span class="metric-label">Clareza estimada</span>
+                    <span class="metric-value">{{ ling.clarity|floatformat:3 }}</span>
+                    <p class="metric-explain">
+                        Indica se as frases estão estruturadas de forma clara e objetiva.
+                        Valores baixos sugerem frases longas, vícios ou pausas confusas.
+                    </p>
+                    <p class="metric-explain">
+                        {% if ling.clarity < 0.40 %}
+                            Sua fala ficou um pouco confusa. Reduzir vícios ajuda bastante.
+                        {% elif ling.clarity < 0.70 %}
+                            Clareza razoável, mas com momentos de dúvida.
+                        {% else %}
+                            Clareza muito boa. Suas frases foram bem articuladas.
+                        {% endif %}
+                    </p>
+                </div>
+
+                <div class="linguagem-item">
+                    <span class="metric-label">Variação de entonação</span>
+                    <span class="metric-value">{{ ling.prosody_proxy|floatformat:3 }}</span>
+                    <p class="metric-explain">
+                        Mostra se sua voz teve emoção e variação natural.
+                        Valores altos significam que sua fala não foi monótona.
+                    </p>
+                    <p class="metric-explain">
+                        {% if ling.prosody_proxy < 0.40 %}
+                            Sua entonação ficou bem reta. Isso faz a fala parecer monótona.
+                        {% elif ling.prosody_proxy < 0.70 %}
+                            Boa variação, mas ainda pode ficar mais expressivo.
+                        {% else %}
+                            Ótima entonação. Sua fala ficou viva e agradável.
+                        {% endif %}
+                    </p>
+                </div>
+
+                <div class="linguagem-item">
+                    <span class="metric-label">Concentração estimada</span>
+                    <span class="metric-value">{{ ling.human_nervousness|floatformat:3 }}</span>
+                    <p class="metric-explain">
+                        Baseado no ritmo da fala, hesitações e pausas.
+                        Quanto maior, mais sinais de ansiedade.
+                    </p>
+                    <p class="metric-explain">
+                        {% if ling.human_nervousness > 0.70 %}
+                            Houve bastante nervosismo perceptível. Respirar pausadamente ajuda.
+                        {% elif ling.human_nervousness > 0.40 %}
+                            Alguns sinais de ansiedade, mas nada grave.
+                        {% else %}
+                            Você demonstrou excelente controle emocional.
+                        {% endif %}
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="summary-section technical-section">
+        <div class="container">
+            <h2 class="fade-in">Dados técnicos da análise</h2>
+
+            <div class="technical-grid">
+                <div class="technical-card">
+                    <h3>Tempo e segmentos usados</h3>
+                    <ul class="technical-list">
+                        <li>Duração total: <strong>{{ dados.duration_total|floatformat:1 }} s</strong></li>
+                        <li>Tempo do apresentador: <strong>{{ dados.duration_presenter_real|floatformat:1 }} s</strong></li>
+                        <li>Segmentos analisados: <strong>{{ dados.segmentos_usados }}</strong></li>
+                        <li>Total de segmentos detectados: <strong>{{ dados.segmentos_totais }}</strong></li>
+                    </ul>
+                    <div class="technical-explain">
+                        <p class="technical-explain-title">Por que dividir em segmentos</p>
+                        <p class="technical-explain-text">
+                            A apresentação é dividida em trechos menores para que o sistema consiga analisar cada parte
+                            com mais precisão. Isso ajuda a separar momentos de introdução, explicação, exemplos e conclusão,
+                            além de facilitar o descarte de trechos que não são do apresentador quando necessário.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="technical-card">
+                    <h3>Processamento do SALA</h3>
+                    <ul class="technical-list">
+                        <li>Diarização: <strong>{{ dados.analisado }}</strong></li>
+                        <li>Tempo de processamento: <strong>{{ dados.tempo_execucao|floatformat:2 }} s</strong></li>
+                    </ul>
+                    <div class="technical-explain">
+                        <p class="technical-explain-title">O que é diarização</p>
+                        <p class="technical-explain-text">
+                            Diarização é o processo de identificar quem está falando em cada parte do áudio.
+                            O SALA usa isso para separar o que é fala do apresentador e o que é fala da banca.
+                            Quando o relatório indica que o áudio está limpo para o apresentador, significa que
+                            quase todo o material analisado de fato veio da sua fala, sem interferência relevante
+                            de outras pessoas.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="technical-card">
+                    <h3>Arquivos utilizados</h3>
+                    <ul class="technical-list">
+                        <li>Vídeo analisado:</li>
+                        <li><span class="path-text">{{ dados.input }}</span></li>
+                        <li>Áudio tratado:</li>
+                        <li><span class="path-text">{{ dados.audio }}</span></li>
+                    </ul>
+                    <div class="technical-explain">
+                        <p class="technical-explain-title">Como esses arquivos são usados</p>
+                        <p class="technical-explain-text">
+                            O vídeo é convertido em áudio tratado para remoção de ruídos e ajustes técnicos.
+                            A partir desse áudio, são feitos a transcrição, a separação por falantes e todos os
+                            cálculos que resultam nas métricas e notas exibidas neste relatório.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="summary-section transcription-section">
+        <div class="container">
+            <h2 class="fade-in">Texto da sua apresentação</h2>
+
+            {% with trans=dados.transcricao|default:dados.text %}
+            <div class="transcription-box">
+                {{ trans }}
+            </div>
+            {% endwith %}
+        </div>
+    </section>
+
+    <section class="summary-section">
+        <div class="container">
+            <h2 class="fade-in">Plano de melhoria sugerido</h2>
+
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <div class="summary-icon">
+                        <i class="fas fa-times-circle"></i>
+                    </div>
+                    <h3 class="summary-title">Principais pontos a cuidar</h3>
+                    <ul class="summary-text summary-list">
+                        {% for item in fb.principais_falhas %}
+                            <li>{{ item }}</li>
+                        {% empty %}
+                            <li>Não foram identificadas falhas relevantes nesta análise.</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <div class="summary-card">
+                    <div class="summary-icon">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <h3 class="summary-title">Ações para treinar agora</h3>
+                    <ul class="summary-text summary-list">
+                        {% for item in fb.acoes_curto_prazo %}
+                            <li>{{ item }}</li>
+                        {% empty %}
+                            <li>Prepare um roteiro simples, treine em voz alta e grave-se para ouvir depois.</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            
+            
+            {% if fb.vicios_linguagem %}
+            <div class="fade-in summary-detailed" style="margin-top: 40px;">
+                <h3 style="text-align: center;">Vícios de Linguagem e Muletas Detectadas</h3>
+                <div class="vicios-container">
+                    <ul class="vicios-list">
+                        {% for vicio in fb.vicios_linguagem %}
+                            <li class="vicio-tag">{{ vicio }}</li>
+                        {% empty %}
+                            <li class="vicio-tag-none">Nenhum vício de linguagem repetitivo foi detectado.</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            {% endif %}
+
+        </div>
+    </section>
+
+    <section class="actions-section">
+        <div class="container actions-container">
+            <h2 class="fade-in">O que fazer depois</h2>
+            <p class="fade-in">Escolha um ou dois pontos para treinar novamente. Suas notas tendem a subir com prática.</p>
+
+            <div class="actions-buttons">
+                <a href="{% url 'treino' %}" class="btn">
+                    <i class="fas fa-redo"></i> Fazer nova apresentação
+                </a>
+                <a href="{% url 'relatorio_pdf' relatorio.id %}" class="btn btn-outline">
+                    <i class="fas fa-download"></i> Baixar relatório
+                </a>
+            </div>
+        </div>
+    </section>
+
+    {{ dados|json_script:"dados-relatorio" }}
+    <script src="{% static 'js/relatorio_analise.js' %}"></script>
+
+</main>
+
+{% endwith %}
+{% endwith %}
+{% endblock %}

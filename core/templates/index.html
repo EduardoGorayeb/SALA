@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock %}
+{% block content %}
+<main>
+
+  <section id="hero" class="hero-section">
+    <div class="container">
+      <div class="hero-content">
+        <h1>Aprimore suas <span id="spanbanner">apresentações</span><br>com inteligência artificial</h1>
+        <p class="texto">
+          S.A.L.A. é uma plataforma inovadora que analisa e melhora suas habilidades de apresentação
+          através de feedbacks precisos e personalizados.
+        </p>
+        <div class="hero-buttons">
+          <a href="{% url 'treino' %}" class="btn exp-button">Experimente Grátis</a>
+          <a href="#about" class="btn sb-button">Saiba Mais</a>
+        </div>
+      </div>
+      <div class="hero-image">
+        <div class="image-placeholder"></div>
+      </div>
+    </div>
+  </section>
+
+  <div id="about-top"></div>
+  <section id="about" class="about-section">
+    <div class="container">
+      <h2 class="titulo-sublinhado">Sobre o S.A.L.A.</h2>
+      <div class="about-content">
+        <div class="about-image-placeholder"></div>
+        <div class="about-text">
+          <p class="texto">
+            O S.A.L.A. é a solução definitiva para profissionais e estudantes que buscam excelência em
+            comunicação. Através de algoritmos avançados, nossa IA oferece uma análise completa de suas
+            apresentações, identificando pontos fortes e áreas para aprimoramento.
+            <br><br>
+            Nossa plataforma oferece feedback detalhado sobre diversos aspectos da sua
+            performance, permitindo que você evolua rapidamente e se torne um comunicador mais eficiente
+            e confiante.
+          </p>
+          <ul>
+            <li>
+              <div class="icone-lista"><i class="fa-solid fa-brain"></i></div>
+              Tecnologia Avançada
+            </li>
+            <li>
+              <div class="icone-lista"><i class="fa-solid fa-chart-line"></i></div>
+              Análise em tempo real
+            </li>
+            <li>
+              <div class="icone-lista"><i class="fa-solid fa-user-graduate"></i></div>
+              Para Todos os Níveis
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="features" class="features-section">
+    <div class="container">
+      <h2 class="titulo-sublinhado">O que nossa IA analisa</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <i class="fa-solid fa-microphone"></i>
+          <h4>Tom de Voz</h4>
+          <p class="texto">Analisamos a variação, clareza e ritmo da sua voz para garantir uma entrega dinâmica.</p>
+        </div>
+        <div class="feature-card">
+          <i class="fa-solid fa-gauge-high"></i>
+          <h4>Velocidade da Fala</h4>
+          <p class="texto">Identificamos se sua fala está muito rápida ou lenta, ajudando a encontrar o ritmo ideal.</p>
+        </div>
+        <div class="feature-card">
+          <i class="fa-solid fa-file-lines"></i>
+          <h4>Coerência com o Tema</h4>
+          <p class="texto">Avaliamos a clareza e o impacto da estrutura lógica e storytelling da sua apresentação.</p>
+        </div>
+        <div class="feature-card">
+          <i class="fa-solid fa-language"></i>
+          <h4>Clareza na Comunicação</h4>
+          <p class="texto">Detectamos vícios de linguagem e palavras repetitivas que podem comprometer sua mensagem.</p>
+        </div>
+        <div class="feature-card">
+          <i class="fa-solid fa-layer-group"></i>
+          <h4>Tipo de Apresentação</h4>
+          <p class="texto">
+            Consideramos o tipo de sua apresentação e ajustamos toda a análise para entregar notas mais justas e relevantes.
+          </p>
+        </div>
+        <div class="feature-card">
+          <i class="fa-solid fa-chart-pie"></i>
+          <h4>Estrutura do Conteúdo</h4>
+          <p class="texto">Verificamos se a introdução, desenvolvimento e conclusão estão bem definidos e coesos.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="how-to" class="how-to-section">
+    <div class="container">
+      <h2 class="titulo-sublinhado">Como utilizar o S.A.L.A.</h2>
+      <div class="how-to-grid">
+        <div class="feature-card">
+          <div class="step-number">1</div>
+          <h4>Cadastro</h4>
+          <p class="texto">Crie sua conta gratuitamente e acesse a plataforma web ou mobile.</p>
+        </div>
+        <div class="feature-card">
+          <div class="step-number">2</div>
+          <h4>Gravação</h4>
+          <p class="texto">Grave sua apresentação usando a câmera e o microfone do seu dispositivo.</p>
+        </div>
+        <div class="feature-card">
+          <div class="step-number">3</div>
+          <h4>Análise</h4>
+          <p class="texto">Nossa IA processa sua apresentação e gera relatórios detalhados.</p>
+        </div>
+        <div class="feature-card">
+          <div class="step-number">4</div>
+          <h4>Feedback</h4>
+          <p class="texto">Receba insights valiosos e sugestões para melhorar sua performance.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" class="faq-section">
+    <div class="container">
+        <h2 class="titulo-sublinhado">Perguntas Frequentes</h2>
+        <div class="faq-accordion">
+            <details>
+                <summary>Como a S.A.L.A. funciona? <i class="fa-solid fa-chevron-down"></i></summary>
+                <p class="texto">
+                    A S.A.L.A. combina tecnologias avançadas de Inteligência Artificial para analisar sua apresentação em várias camadas.
+                    O sistema identifica sua voz, remove ruídos, faz diarização, transcreve o áudio com precisão e avalia critérios como
+                    clareza, coerência temática, ritmo, articulação e estrutura do conteúdo. Todos esses dados são reunidos em um relatório
+                    detalhado com métricas reais e sugestões de melhoria.
+                </p>
+            </details>
+            <details>
+                <summary>Preciso de algum equipamento especial? <i class="fa-solid fa-chevron-down"></i></summary>
+                <p class="texto">
+                    Não. Apenas uma webcam e um microfone comum já são suficientes. O próprio sistema corrige ruídos, equaliza volume e
+                    melhora a legibilidade do áudio. Um ambiente iluminado e silencioso ajuda, mas não é obrigatório para que a análise
+                    funcione corretamente.
+                </p>
+            </details>
+            <details>
+                <summary>Meus dados estão seguros? <i class="fa-solid fa-chevron-down"></i></summary>
+                <p class="texto">
+                    Sim. Todo o processamento ocorre em ambiente seguro e seus vídeos ficam armazenados de forma criptografada e
+                    acessíveis apenas para você. A S.A.L.A. não compartilha, vende ou reutiliza seus dados para qualquer tipo de treinamento
+                    sem consentimento explícito. Você pode excluir seu histórico e seus arquivos quando quiser.
+                </p>
+            </details>
+            <details>
+                <summary>A S.A.L.A. substitui um instrutor humano? <i class="fa-solid fa-chevron-down"></i></summary>
+                <p class="texto">
+                    A plataforma não substitui um instrutor, ela complementa. A S.A.L.A. oferece feedback objetivo, repetível e baseado em
+                    dados, permitindo que você pratique quantas vezes quiser e acompanhe seu progresso. O olhar humano continua sendo
+                    importante, mas a IA acelera muito o processo de evolução.
+                </p>
+            </details>
+            <details>
+                <summary>A S.A.L.A. entende qualquer tema? <i class="fa-solid fa-chevron-down"></i></summary>
+                <p class="texto">
+                    Sim. A transcrição e o motor de análise semântica conseguem interpretar conteúdos de diversas áreas: apresentações
+                    escolares, defesas de TCC, propostas empresariais, conteúdos técnicos, resumos científicos e muito mais. A análise se
+                    ajusta ao tema informado para garantir um diagnóstico coerente.
+                </p>
+            </details>
+            <details>
+                <summary>Como as notas do relatório são calculadas? <i class="fa-solid fa-chevron-down"></i></summary>
+                <p class="texto">
+                    Cada nota é gerada com base em métricas reais extraídas da sua apresentação: velocidade média da fala, entonação,
+                    nível de clareza, estrutura textual, fidelidade ao tema, repetição de palavras e outros fatores. Não existe avaliação
+                    subjetiva: cada pontuação é resultado de análise técnica e mensurável.
+                </p>
+            </details>
+        </div>
+    </div>
+</section>
+</main>
+{% endblock %}

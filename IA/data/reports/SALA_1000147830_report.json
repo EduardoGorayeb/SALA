@@ -1,0 +1,74 @@
+{
+  "input": "/home/gorayeb/Desktop/SALA/IA/data/inputs/1000147830.mp4",
+  "audio": "/home/gorayeb/Desktop/SALA/IA/data/separated/1000147830_mono.wav",
+  "duration_total": 163.52,
+  "duration_presenter_real": 163.52,
+  "segmentos_totais": 10,
+  "segmentos_usados": 10,
+  "analisado": "audio_completo",
+  "text": "Bom dia, pessoal, hoje eu vou apresentar o seu trabalho sobre clonagem e suas tecnologias. O grupo é eu, o Arthur Mambelli, o Breno Rodrigues, o Eduardo Meneguetti e o Matheus Mariano. Vamos para a parte dos tópicos. Aqui a gente tem os nossos tópicos, a gente tem o que é, conceitos, definição e os tipos. A gente tem o segundo tópico de como que a clonagem é feita. O terceiro tópico, que é uma clonagem que foi feita numa ovelha, que se chama ovelha Dolly, e quatro, a gente tem uma questão que a gente separou aqui do livro. Vamos para o que, para explicar o que é clonagem. A clonagem é um processo que tem, né, na ciência, que é de criar uma cópia idêntica a de organismo, célula ou molécula. O clone resultante tem a mesma composição genética do organismo de origem. Ele, em organismos multicelulares, o processo envolve a transferência do núcleo de uma célula somática, célula do corpo, para um óvulo cujo o núcleo foi removido, criando assim um novo organismo com as mesmas características, como a gente vai mostrar que é o exemplo da ovelha Dolly, que foi criada com as mesmas características de uma ovelha que foi um clone. Aqui a gente tem os tipos de clonagens, que são três tipos, que é a clonagem natural, que ocorre quando tem gêmeos idênticos, quando nascem gêmeos idênticos da, da mulher, né? A gente tem a reprodutiva, cujo o objetivo é criar um organismo inteiro geneticamente idêntico ao outro, e a terapêutica, que busca produzir células tronco para tratamento de doenças sem gerar um novo indivíduo. A de células troncos, ela é principalmente usada, tá sendo usada em pessoas que têm diabetes. Elas são usadas para conseguir reconstruir aquelas pessoas que têm diabetes, que vão perder uma perna, um braço, a, a medicina usa para que essa pessoa não perca por meio dessas células tronco. Aí aqui a gente tem o exemplo da ovelha Dolly. Eu vou ler um pouquinho sobre a ovelha Dolly. Quem foi a ovelha Dolly? Ela foi o primeiro mamífero clonado a partir de células adultas. O núcleo de uma célula das glândulas mamárias de uma ovelha Finn Dorset, cabeça branca, foi transferido para um óvulo sem núcleo de uma Scotch Black Face, cabeça preta. A outra ovelha da mesma raça gerou a Dolly, idêntica a Finn Durst. O uso das raças diferentes serviu para evitar confusão em descaracterística. O experimento ocorreu entre 1970, 95 e 1996 e foi divulgado em 1997. Bom, esse foi a minha apresentação. Eu acho que tem mais uma algumas coisas aqui para falar. Aqui a gente tem a repercussão do caso, que gerou avanços científicos, interesses em outros animais, que também gerou para que as pessoas pudessem pagar para fazer esse tipo de clonagem, que se ela tivesse um animalzinho muito querido, as pessoas que são ricas pudessem fazer esse tipo de clonagem. A gente também teve os debates éticos. E foi isso.",
+  "wpm_real": 182.73,
+  "tangencia_sim": 0.8328,
+  "scores": {
+    "velocidade": 5.23,
+    "tangencia": 8.33,
+    "clareza": 5.51,
+    "nervosismo": 8.38,
+    "prosodia": 4.41
+  },
+  "scores_contribuicoes": {
+    "velocidade": 0.105,
+    "tangencia": 0.25,
+    "clareza": 0.11,
+    "nervosismo": 0.126,
+    "prosodia": 0.066
+  },
+  "final_score": 7.22,
+  "linguagem": {
+    "token_diversity": 0.4497991967871486,
+    "semantic_redundancy": 0.9021332859992981,
+    "clarity_text": 0.6002217373331956,
+    "prosody_text": 0.43531023537412766,
+    "nervous_textual": 0.04417670682730923,
+    "prosody_proxy": 0.44111337844710774,
+    "human_nervousness": 0.16248796124523832,
+    "clarity": 0.5513610009446059
+  },
+  "acustica": {
+    "prosody_audio": 0.4458614045977277,
+    "human_nervousness_audio": 0.24136213085719102,
+    "clarity_audio": 0.49164232313632966,
+    "jitter": 0.013944771820902866,
+    "shimmer": 0.30842337012290955,
+    "hnr": 0.6105768084526062,
+    "energy_var": 0.27076399326324463,
+    "pause_rate": 0.19996086871453728
+  },
+  "tema_fornecido": "Clonagem e suas tecnologias",
+  "tipo_discurso": "explicacao_escolar",
+  "tempo_execucao": 46.34,
+  "contexto_apresentacao": "",
+  "transcricao": "Bom dia, pessoal, hoje eu vou apresentar o seu trabalho sobre clonagem e suas tecnologias. O grupo é eu, o Arthur Mambelli, o Breno Rodrigues, o Eduardo Meneguetti e o Matheus Mariano. Vamos para a parte dos tópicos. Aqui a gente tem os nossos tópicos, a gente tem o que é, conceitos, definição e os tipos. A gente tem o segundo tópico de como que a clonagem é feita. O terceiro tópico, que é uma clonagem que foi feita numa ovelha, que se chama ovelha Dolly, e quatro, a gente tem uma questão que a gente separou aqui do livro. Vamos para o que, para explicar o que é clonagem. A clonagem é um processo que tem, né, na ciência, que é de criar uma cópia idêntica a de organismo, célula ou molécula. O clone resultante tem a mesma composição genética do organismo de origem. Ele, em organismos multicelulares, o processo envolve a transferência do núcleo de uma célula somática, célula do corpo, para um óvulo cujo o núcleo foi removido, criando assim um novo organismo com as mesmas características, como a gente vai mostrar que é o exemplo da ovelha Dolly, que foi criada com as mesmas características de uma ovelha que foi um clone. Aqui a gente tem os tipos de clonagens, que são três tipos, que é a clonagem natural, que ocorre quando tem gêmeos idênticos, quando nascem gêmeos idênticos da, da mulher, né? A gente tem a reprodutiva, cujo o objetivo é criar um organismo inteiro geneticamente idêntico ao outro, e a terapêutica, que busca produzir células tronco para tratamento de doenças sem gerar um novo indivíduo. A de células troncos, ela é principalmente usada, tá sendo usada em pessoas que têm diabetes. Elas são usadas para conseguir reconstruir aquelas pessoas que têm diabetes, que vão perder uma perna, um braço, a, a medicina usa para que essa pessoa não perca por meio dessas células tronco. Aí aqui a gente tem o exemplo da ovelha Dolly. Eu vou ler um pouquinho sobre a ovelha Dolly. Quem foi a ovelha Dolly? Ela foi o primeiro mamífero clonado a partir de células adultas. O núcleo de uma célula das glândulas mamárias de uma ovelha Finn Dorset, cabeça branca, foi transferido para um óvulo sem núcleo de uma Scotch Black Face, cabeça preta. A outra ovelha da mesma raça gerou a Dolly, idêntica a Finn Durst. O uso das raças diferentes serviu para evitar confusão em descaracterística. O experimento ocorreu entre 1970, 95 e 1996 e foi divulgado em 1997. Bom, esse foi a minha apresentação. Eu acho que tem mais uma algumas coisas aqui para falar. Aqui a gente tem a repercussão do caso, que gerou avanços científicos, interesses em outros animais, que também gerou para que as pessoas pudessem pagar para fazer esse tipo de clonagem, que se ela tivesse um animalzinho muito querido, as pessoas que são ricas pudessem fazer esse tipo de clonagem. A gente também teve os debates éticos. E foi isso.",
+  "feedback_gemini": {
+    "principais_falhas": [
+      "Uso excessivo de 'a gente' prejudica a clareza e formalidade.",
+      "Presença de 'né' e 'da da' indicam falta de fluidez e hesitação.",
+      "A prosódia (4.41) carece de expressividade, tornando a apresentação monótona.",
+      "A clareza (5.51) pode ser melhorada com uma organização mais concisa das ideias.",
+      "Redundância semântica (0.90) sugere repetição de informações sem necessidade."
+    ],
+    "acoes_curto_prazo": [
+      "Substituir 'a gente' por pronomes ou construções mais formais.",
+      "Evitar o uso de 'né' e 'da da' através de pausas estratégicas e respiração consciente.",
+      "Praticar a entonação da voz para enfatizar pontos importantes e gerar interesse.",
+      "Revisar o roteiro para eliminar repetições desnecessárias e focar nos pontos-chave.",
+      "Gravar e analisar a própria fala para identificar e corrigir vícios de linguagem."
+    ],
+    "resumo_geral": "A apresentação, classificada como explicação escolar, abordou o tema 'Clonagem e suas tecnologias'. A velocidade de fala (WPM 182.73) está adequada, mas a clareza (5.51) e a prosódia (4.41) precisam de atenção. O nervosismo (8.38) parece bem controlado. A tangência ao tema (8.33) é um ponto forte. A análise da transcrição revela vícios de linguagem como 'a gente' e 'né', além de redundância semântica (0.90). A diversidade de vocabulário (0.44) pode ser expandida para enriquecer a apresentação. No geral, a apresentação demonstra bom conhecimento do tema, mas necessita de refinamentos na comunicação para alcançar maior impacto e clareza.",
+    "vicios_linguagem": [
+      "a gente",
+      "né",
+      "da da"
+    ]
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "input": "C:\\Users\\CTDEV24\\Desktop\\SALA\\IA\\data\\inputs\\gravacao.webm",
+  "audio": "C:\\Users\\CTDEV24\\Desktop\\SALA\\IA\\data\\separated\\gravacao_mono.wav",
+  "duration_total": 11.28,
+  "duration_presenter_real": 8.15,
+  "segmentos_totais": 1,
+  "segmentos_usados": 1,
+  "analisado": "audio_completo",
+  "text": "aí, ele grava, ele, mas aí ele grava direto no site, aí ele vai pegando, ele vai pegando o microfone e aí, quando a gente clica em parar a gravação, ele",
+  "wpm_real": 228.2,
+  "tangencia_sim": 0.7986,
+  "scores": {
+    "velocidade": 5.68,
+    "tangencia": 7.99,
+    "clareza": 1.84,
+    "nervosismo": 3.34,
+    "prosodia": 6.05
+  },
+  "scores_contribuicoes": {
+    "velocidade": 0.085,
+    "tangencia": 0.2,
+    "clareza": 0.064,
+    "nervosismo": 0.067,
+    "prosodia": 0.091
+  },
+  "final_score": 5.84,
+  "linguagem": {
+    "token_diversity": 0.6129032258064516,
+    "semantic_redundancy": 1.0,
+    "clarity": 0.18387096774193548,
+    "prosody_proxy": 0.6053557958184619,
+    "human_nervousness": 0.33440693439962255
+  },
+  "tema_fornecido": "Teste do projeto",
+  "tipo_discurso": "explicacao_escolar",
+  "tempo_execucao": 32.81,
+  "contexto_apresentacao": "Teste do projeto",
+  "transcricao": "aí, ele grava, ele, mas aí ele grava direto no site, aí ele vai pegando, ele vai pegando o microfone e aí, quando a gente clica em parar a gravação, ele",
+  "contexto": "Teste do projeto",
+  "feedback_gemini": {
+    "principais_falhas": [
+      "Clareza muito baixa (1.84) prejudica a compreensão.",
+      "Velocidade excessiva (228 WPM) dificulta o acompanhamento.",
+      "Alta redundância semântica (1.0) indica repetição de ideias.",
+      "Nervosismo perceptível (3.34) pode distrair o ouvinte.",
+      "Baixa diversidade de vocabulário (0.61) torna a apresentação monótona."
+    ],
+    "acoes_curto_prazo": [
+      "Reduzir a velocidade da fala para facilitar a compreensão.",
+      "Eliminar repetições e redundâncias para tornar a mensagem mais concisa.",
+      "Fazer pausas estratégicas para organizar os pensamentos e reduzir o nervosismo.",
+      "Expandir o vocabulário para evitar repetições de palavras e tornar a apresentação mais interessante.",
+      "Praticar a apresentação com foco na clareza e na articulação das palavras."
+    ],
+    "resumo_geral": "A apresentação, classificada como 'explicação escolar' e contextualizada como 'Teste do projeto', demonstra uma clareza muito baixa (1.84) e uma velocidade excessiva (228 WPM). O nervosismo (3.34) e a alta redundância semântica (1.0) também são pontos fracos. A diversidade de vocabulário é limitada (0.61). A tangência ao tema é relativamente alta (7.99), mas a clareza geral precisa ser significativamente melhorada para garantir que a mensagem seja compreendida de forma eficaz. A prosódia (6.05) está razoável, mas pode ser aprimorada com uma fala mais clara e menos acelerada.",
+    "vicios_linguagem": [
+      "aí",
+      "ele ele"
+    ]
+  }
+}

@@ -1,0 +1,1486 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+{% load static %}
+{% load matematica %}
+<head>
+    <meta charset="UTF-8">
+    <title>Relatório de Análise de Apresentação - SALA</title>
+    <style>
+        /* ===== RESET E CONFIGURAÇÕES GLOBAIS ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+            color-adjust: exact;
+        }
+
+        ul, ol {
+            list-style: none;
+        }
+
+        /* ===== CONFIGURAÇÕES DE PÁGINA ===== */
+        @page {
+            size: A4;
+            margin: 15mm 15mm 20mm 15mm;
+            
+            @bottom-center {
+                content: "Página " counter(page) " de " counter(pages);
+                font-size: 9px;
+                color: #5f6368;
+                font-family: "Segoe UI", sans-serif;
+                margin-bottom: 6mm;
+            }
+        }
+
+        @page :first {
+            margin-top: 25mm;
+            
+            @top-center {
+                content: "Relatório de Análise - Sistema SALA";
+                font-size: 10px;
+                color: #0f9d58;
+                font-weight: 600;
+                font-family: "Segoe UI", sans-serif;
+                margin-top: 10mm;
+            }
+            
+            @bottom-center {
+                content: "Página " counter(page) " de " counter(pages);
+                font-size: 9px;
+                color: #5f6368;
+                font-family: "Segoe UI", sans-serif;
+                margin-bottom: 6mm;
+            }
+        }
+
+        html, body {
+            width: 100%;
+            font-family: "Segoe UI", "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #ffffff;
+            color: #1a1a1a;
+            line-height: 1.5;
+            font-size: 12px;
+            font-weight: 400;
+        }
+
+        /* ===== MARCA D'ÁGUA ===== */
+        .watermark {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            font-size: 120px;
+            color: rgba(15, 157, 88, 0.03);
+            font-weight: 900;
+            font-family: "Segoe UI", sans-serif;
+            z-index: -1;
+            pointer-events: none;
+            white-space: nowrap;
+            text-transform: uppercase;
+            letter-spacing: 12px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.1);
+        }
+
+        /* ===== CONTAINERS ===== */
+        .container-principal {
+            width: 100%;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+            background-color: #ffffff;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* ===== TIPOGRAFIA PROFISSIONAL ===== */
+        h1 {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #0f9d58 0%, #1cbb6c 100%);
+            color: #ffffff;
+            padding: 3px;
+            border-radius: 8px;
+            text-align: center;
+            font-family: "Segoe UI", sans-serif;
+            letter-spacing: -0.5px;
+            line-height: 1.2;
+            display: inline-block;
+        }
+
+        h2 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 25px;
+            position: relative;
+            color: #1a1a1a;
+            font-family: "Segoe UI", sans-serif;
+            text-align: center;
+            padding-bottom: 12px;
+        }
+
+        h2:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(135deg, #0f9d58 0%, #1cbb6c 100%);
+            border-radius: 2px;
+            box-shadow: 0 2px 8px rgba(15, 157, 88, 0.3);
+        }
+
+        h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #0f9d58;
+            font-family: "Segoe UI", sans-serif;
+            text-align: center;
+            position: relative;
+            padding: 8px 0;
+        }
+
+        h3:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 2px;
+            background: linear-gradient(135deg, #0f9d58 0%, #1cbb6c 100%);
+            border-radius: 1px;
+        }
+
+        /* ===== SEÇÃO HERO - CAPA PROFISSIONAL ===== */
+        .report-hero {
+            padding: 50px 0 60px 0;
+            background: linear-gradient(135deg, #f8faf9 0%, #ffffff 50%, #f8faf9 100%);
+            text-align: center;
+            border-bottom: 3px solid #0f9d58;
+            margin-bottom: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .report-hero:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #0f9d58, #1cbb6c, #0f9d58);
+        }
+
+        .hero-subtitle {
+            font-size: 16px;
+            color: #5f6368;
+            margin-top: 10px;
+            margin-bottom: 25px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .hero-meta {
+            font-size: 14px;
+            color: #5f6368;
+            margin-bottom: 30px;
+            padding: 12px 20px;
+            background: rgba(15, 157, 88, 0.05);
+            border-radius: 10px;
+            display: inline-block;
+            border: 1px solid rgba(15, 157, 88, 0.1);
+        }
+
+        .hero-score-wrapper {
+            margin-top: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .overall-score {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #0f9d58 0%, #1cbb6c 100%);
+            color: #ffffff;
+            font-size: 48px;
+            font-weight: 800;
+            margin: 0;
+            border: 8px solid #ffffff;
+            box-shadow: 
+                0 10px 40px rgba(15, 157, 88, 0.3),
+                0 0 0 1px rgba(15, 157, 88, 0.1),
+                inset 0 2px 4px rgba(255, 255, 255, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+
+        .overall-score:before {
+            content: '';
+            position: absolute;
+            top: -12px;
+            left: -12px;
+            right: -12px;
+            bottom: -12px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #0f9d58, #1cbb6c);
+            z-index: -1;
+            opacity: 0.15;
+            filter: blur(8px);
+        }
+
+        .overall-info {
+            max-width: 500px;
+            text-align: left;
+            position: relative;
+        }
+
+        .score-label {
+            font-size: 20px;
+            color: #1a1a1a;
+            font-weight: 600;
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+
+        .score-label strong {
+            color: #0f9d58;
+            font-weight: 700;
+        }
+
+        .score-explainer {
+            font-size: 14px;
+            color: #5f6368;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .score-details {
+            background: rgba(15, 157, 88, 0.05);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(15, 157, 88, 0.1);
+            margin-top: 15px;
+        }
+
+        .score-details-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #0f9d58;
+            margin-bottom: 5px;
+        }
+
+        .score-details-text {
+            font-size: 12px;
+            color: #5f6368;
+            line-height: 1.4;
+        }
+
+        /* ===== SEÇÕES PRINCIPAIS - DESIGN DETALHADO ===== */
+        .summary-section {
+            padding: 50px 0;
+            position: relative;
+        }
+
+        .summary-section:not(:last-child):after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #e0e0e0, transparent);
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-bottom: 35px;
+        }
+
+        .summary-card {
+            background: linear-gradient(135deg, #ffffff 0%, #fafafa 100%);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 
+                0 8px 30px rgba(0, 0, 0, 0.08),
+                0 2px 8px rgba(0, 0, 0, 0.03),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(15, 157, 88, 0.1);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .summary-card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            background: linear-gradient(135deg, #0f9d58 0%, #1cbb6c 100%);
+            border-radius: 6px 0 0 6px;
+        }
+
+        .summary-card:after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(15, 157, 88, 0.02), transparent);
+            transform: rotate(45deg);
+        }
+
+        .summary-icon {
+            font-size: 36px;
+            margin-bottom: 20px;
+            color: #0f9d58;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .summary-icon:before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            background: rgba(15, 157, 88, 0.1);
+            border-radius: 50%;
+            z-index: -1;
+        }
+
+        .summary-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #1a1a1a;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .summary-text {
+            font-size: 14px;
+            color: #5f6368;
+            line-height: 1.6;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .summary-list {
+            padding-left: 20px;
+            text-align: left;
+            position: relative;
+            z-index: 2;
+        }
+
+        .summary-list li {
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #5f6368;
+            position: relative;
+            padding-left: 5px;
+        }
+
+        .summary-list li:before {
+            content: '▶';
+            color: #0f9d58;
+            font-weight: bold;
+            display: inline-block;
+            width: 1em;
+            margin-left: -1em;
+            font-size: 10px;
+        }
+
+        .summary-detailed {
+            margin-top: 35px;
+            padding: 30px;
+            background: linear-gradient(135deg, #f8faf9 0%, #ffffff 100%);
+            border-radius: 16px;
+            border: 1px solid rgba(15, 157, 88, 0.1);
+            position: relative;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+        }
+
+        .summary-detailed:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            background: linear-gradient(135deg, #0f9d58 0%, #1cbb6c 100%);
+            border-radius: 6px 0 0 6px;
+        }
+
+        .summary-detailed h3 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #0f9d58;
+        }
+
+        .summary-detailed p {
+            font-size: 14px;
+            color: #4b5563;
+            line-height: 1.7;
+            text-align: justify;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ===== CONTEXTO ===== */
+        .contexto-section {
+            padding: 30px 0;
+        }
+
+        .contexto-box {
+            background: linear-gradient(135deg, #ffffff 0%, #fafafa 100%);
+            border-radius: 16px;
+            padding: 30px;
+            border: 1px solid rgba(15, 157, 88, 0.1);
+            font-size: 14px;
+            color: #4b5563;
+            line-height: 1.7;
+            white-space: pre-line;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            position: relative;
+        }
+
+        .contexto-box:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            background: linear-gradient(135deg, #0f9d58 0%, #1cbb6c 100%);
+            border-radius: 6px 0 0 6px;
+        }
+
+        /* ===== TIPO DE DISCURSO ===== */
+        .tipo-discurso-card {
+            display: flex;
+            align-items: flex-start;
+            gap: 30px;
+            background: linear-gradient(135deg, #ffffff 0%, #fafafa 100%);
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 
+                0 8px 30px rgba(0, 0, 0, 0.08),
+                0 2px 8px rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(15, 157, 88, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tipo-discurso-card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            background: linear-gradient(135deg, #0f9d58 0%, #1cbb6c 100%);
+            border-radius: 6px 0 0 6px;
+        }
+
+        .tipo-discurso-icon {
+            font-size: 48px;
+            color: #0f9d58;
+            margin-top: 5px;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .tipo-discurso-icon:before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 70px;
+            height: 70px;
+            background: rgba(15, 157, 88, 0.1);
+            border-radius: 50%;
+            z-index: -1;
+        }
+
+        .tipo-discurso-content h3 {
+            color: #0f9d58;
+            margin-bottom: 20px;
+            font-size: 22px;
+            text-align: left;
+        }
+
+        .tipo-discurso-content h3:before {
+            left: 0;
+            transform: none;
+        }
+
+        .tipo-discurso-content p {
+            font-size: 14px;
+            color: #4b5563;
+            line-height: 1.7;
+        }
+
+        /* ===== ANÁLISE DETALHADA ===== */
+        .friendly-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin-top: 25px;
+        }
+
+        .friendly-card {
+            background: linear-gradient(135deg, #ffffff 0%, #fafafa 100%);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 
+                0 6px 25px rgba(0, 0, 0, 0.08),
+                0 2px 8px rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(15, 157, 88, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .friendly-card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(135deg, #0f9d58 0%, #1cbb6c 100%);
+            border-radius: 16px 16px 0 0;
+        }
+
+        .friendly-card h3 {
+            margin-bottom: 18px;
+            color: #0f9d58;
+            font-size: 18px;
+            text-align: left;
+        }
+
+        .friendly-card h3:before {
+            left: 0;
+            transform: none;
+        }
+
+        .friendly-value {
+            font-size: 14px;
+            color: #1a1a1a;
+            margin-bottom: 12px;
+            font-weight: 600;
+            padding: 8px 12px;
+            background: rgba(15, 157, 88, 0.05);
+            border-radius: 8px;
+            border: 1px solid rgba(15, 157, 88, 0.1);
+        }
+
+        .friendly-text {
+            font-size: 14px;
+            color: #5f6368;
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        .friendly-contrib {
+            font-size: 13px;
+            color: #0f9d58;
+            font-weight: 700;
+            margin-bottom: 12px;
+            padding: 10px 15px;
+            background: rgba(15, 157, 88, 0.1);
+            border-radius: 8px;
+            display: inline-block;
+            border: 1px solid rgba(15, 157, 88, 0.2);
+        }
+
+        .friendly-extra {
+            font-size: 13px;
+            color: #4b5563;
+            border-top: 1px dashed rgba(15, 157, 88, 0.3);
+            padding-top: 15px;
+            margin-top: 15px;
+            line-height: 1.5;
+            font-style: italic;
+            position: relative;
+        }
+
+        .friendly-extra:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 15px;
+            font-style: normal;
+        }
+
+        /* ===== MÉTRICAS LINGUÍSTICAS ===== */
+        .linguagem-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 25px;
+        }
+
+        .linguagem-item {
+            background: linear-gradient(135deg, #ffffff 0%, #fafafa 100%);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 
+                0 6px 25px rgba(0, 0, 0, 0.08),
+                0 2px 8px rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(15, 157, 88, 0.1);
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .linguagem-item:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            background: linear-gradient(135deg, #0f9d58 0%, #1cbb6c 100%);
+            border-radius: 6px 0 0 6px;
+        }
+
+        .metric-label {
+            display: block;
+            font-size: 13px;
+            color: #5f6368;
+            margin-bottom: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .metric-value {
+            font-size: 32px;
+            font-weight: 800;
+            color: #0f9d58;
+            margin-bottom: 15px;
+            font-family: "Segoe UI", sans-serif;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .metric-explain {
+            font-size: 13px;
+            color: #4b5563;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        /* ===== DADOS TÉCNICOS ===== */
+        .technical-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-top: 25px;
+        }
+
+        .technical-card {
+            background: linear-gradient(135deg, #ffffff 0%, #fafafa 100%);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 
+                0 6px 25px rgba(0, 0, 0, 0.08),
+                0 2px 8px rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(15, 157, 88, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .technical-card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(135deg, #0f9d58 0%, #1cbb6c 100%);
+            border-radius: 16px 16px 0 0;
+        }
+
+        .technical-card h3 {
+            margin-bottom: 20px;
+            font-size: 18px;
+            text-align: left;
+        }
+
+        .technical-card h3:before {
+            left: 0;
+            transform: none;
+        }
+
+        .technical-list {
+            list-style: none;
+            padding-left: 0;
+            font-size: 14px;
+        }
+
+        .technical-list li {
+            margin-bottom: 10px;
+            word-break: break-word;
+            padding-left: 20px;
+            position: relative;
+            color: #5f6368;
+        }
+
+        .technical-list li:before {
+            content: '▸';
+            color: #0f9d58;
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .path-text {
+            font-family: "SF Mono", "Monaco", "Consolas", monospace;
+            font-size: 11px;
+            background: rgba(15, 157, 88, 0.05);
+            padding: 6px 10px;
+            border-radius: 6px;
+            display: inline-block;
+            color: #4b5563;
+            border: 1px solid rgba(15, 157, 88, 0.1);
+        }
+
+        .technical-explain {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px dashed rgba(15, 157, 88, 0.3);
+        }
+
+        .technical-explain-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #0f9d58;
+            margin-bottom: 8px;
+        }
+
+        .technical-explain-text {
+            font-size: 13px;
+            color: #4b5563;
+            line-height: 1.5;
+        }
+
+        /* ===== TRANSCRIÇÃO ===== */
+        .transcription-box {
+            margin-top: 20px;
+            background: linear-gradient(135deg, #f8faf9 0%, #ffffff 100%);
+            border-radius: 16px;
+            padding: 35px;
+            font-size: 13px;
+            white-space: normal;
+            border: 1px solid rgba(15, 157, 88, 0.1);
+            text-align: justify;
+            line-height: 1.6;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            position: relative;
+            text-indent: 20px;
+        }
+
+        .transcription-box:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            background: linear-gradient(135deg, #0f9d58 0%, #1cbb6c 100%);
+            border-radius: 6px 0 0 6px;
+        }
+
+        /* ===== VÍCIOS DE LINGUAGEM ===== */
+        .vicios-container {
+            margin-top: 25px;
+            background: linear-gradient(135deg, #ffffff 0%, #fafafa 100%);
+            border-radius: 16px;
+            padding: 30px;
+            border: 1px solid rgba(15, 157, 88, 0.1);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            position: relative;
+        }
+
+        .vicios-container:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            background: linear-gradient(135deg, #0f9d58 0%, #1cbb6c 100%);
+            border-radius: 6px 0 0 6px;
+        }
+
+        .vicios-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            justify-content: center;
+        }
+
+        .vicio-tag {
+            background: linear-gradient(135deg, #fce8e6 0%, #fef0ef 100%);
+            color: #a52714;
+            font-family: "SF Mono", "Monaco", "Consolas", monospace;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid #f9c6c0;
+            box-shadow: 0 2px 8px rgba(165, 39, 20, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .vicio-tag-none {
+            background: linear-gradient(135deg, #e6f7ee 0%, #f0faf5 100%);
+            color: #0F9D58;
+            font-size: 12px;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid #bce2ca;
+            box-shadow: 0 2px 8px rgba(15, 157, 88, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* ===== CONTROLES DE QUEBRA DE PÁGINA ===== */
+        .page-break-before {
+            page-break-before: always;
+        }
+
+        .page-break-after {
+            page-break-after: always;
+        }
+
+        .keep-together {
+            page-break-inside: avoid;
+        }
+
+        .avoid-break {
+            break-inside: avoid;
+        }
+
+        /* ===== UTILITÁRIOS ===== */
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-20 {
+            margin-top: 20px;
+        }
+
+        .mb-20 {
+            margin-bottom: 20px;
+        }
+
+        .section-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent 0%, #e0e0e0 50%, transparent 100%);
+            margin: 40px 0;
+        }
+
+        /* ===== ESTILOS DE IMPRESSÃO ===== */
+        @media print {
+            body {
+                font-size: 11px;
+            }
+            
+            .summary-grid,
+            .friendly-grid,
+            .linguagem-grid,
+            .technical-grid {
+                display: block;
+            }
+            
+            .summary-card,
+            .friendly-card,
+            .linguagem-item,
+            .technical-card {
+                margin-bottom: 20px;
+                break-inside: avoid;
+            }
+            
+            .transcription-box {
+                max-height: none;
+                overflow: visible;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="watermark">S A L A</div>
+
+    <main class="container-principal">
+    {% with dados=dados %}
+    {% with scores=dados.scores %}
+    {% with fb=dados.feedback_gemini %}
+    {% with ling=dados.linguagem %}
+    {% with contrib=dados.scores_contribuicoes %}
+
+        
+        <section class="report-hero">
+            <div class="container">
+                <div class="report-hero-content">
+                    <h1>Relatório de Análise de Apresentação</h1>
+                    <p class="hero-subtitle">
+                        Análise detalhada do desempenho comunicativo
+                    </p>
+                    <div class="hero-meta">
+                        <strong>Tema analisado:</strong> {{ dados.tema_fornecido }}
+                    </div>
+
+                    <div class="hero-score-wrapper">
+                        <div class="overall-score">
+                            {{ dados.final_score|floatformat:1 }}
+                        </div>
+                        <div class="overall-info">
+                            {% with nota=dados.final_score %}
+                            <div class="score-label">
+                                {% if nota >= 8 %}
+                                    Classificação: <strong>Excelente</strong>
+                                {% elif nota >= 6 %}
+                                    Classificação: <strong>Boa</strong>
+                                {% elif nota >= 4 %}
+                                    Classificação: <strong>Mediana</strong>
+                                {% else %}
+                                    Classificação: <strong>Precisa de melhoria</strong>
+                                {% endif %}
+                            </div>
+                            {% endwith %}
+                            <p class="score-explainer">
+                                Avaliação baseada em 5 dimensões da comunicação: velocidade, foco temático, 
+                                clareza, controle emocional e variação vocal.
+                            </p>
+                            <div class="score-details">
+                                <div class="score-details-title">Métricas Principais</div>
+                                <div class="score-details-text">
+                                    Velocidade: {{ dados.wpm_real|floatformat:0 }} p/min • 
+                                    Foco: {{ dados.tangencia_sim|floatformat:3 }} • 
+                                    Segmentos analisados: {{ dados.segmentos_usados }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        
+        <section class="summary-section">
+            <div class="container">
+                <h2>Análise Executiva da Performance</h2>
+
+                <div class="summary-grid">
+                    <div class="summary-card">
+                        <div class="summary-icon">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <h3 class="summary-title">Pontos de Excelência</h3>
+                        <p class="summary-text">
+                            {% if fb.feedback_curto and fb.feedback_curto.0 %}
+                                {{ fb.feedback_curto.0 }}
+                            {% else %}
+                                Demonstração de competências comunicativas sólidas e domínio do conteúdo apresentado.
+                            {% endif %}
+                        </p>
+                    </div>
+
+                    <div class="summary-card">
+                        <div class="summary-icon">
+                            <i class="fas fa-bullseye"></i>
+                        </div>
+                        <h3 class="summary-title">Oportunidades de Melhoria</h3>
+                        <p class="summary-text">
+                            {% if fb.principais_falhas and fb.principais_falhas.0 %}
+                                {{ fb.principais_falhas.0 }}
+                            {% else %}
+                                Áreas específicas que podem ser refinadas para excelência comunicativa.
+                            {% endif %}
+                        </p>
+                    </div>
+
+                    <div class="summary-card">
+                        <div class="summary-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3 class="summary-title">Indicadores Chave</h3>
+                        <p class="summary-text">
+                            <strong>{{ dados.wpm_real|floatformat:0 }} palavras/minuto</strong> de velocidade média<br>
+                            <strong>{{ dados.tangencia_sim|floatformat:3 }}</strong> de foco temático<br>
+                            <strong>{{ dados.segmentos_usados }}</strong> segmentos analisados
+                        </p>
+                    </div>
+                </div>
+
+                <div class="summary-detailed">
+                    <h3>Análise Compreensiva</h3>
+                    <p>
+                        {% if fb.resumo_geral %}
+                            {{ fb.resumo_geral|linebreaks }}
+                        {% else %}
+                            A apresentação demonstra fundamentos sólidos de comunicação com oportunidades 
+                            estratégicas para refinamento. A análise técnica identificou padrões consistentes 
+                            que, quando otimizados, potencializam significativamente o impacto comunicativo.
+                        {% endif %}
+                    </p>
+                </div>
+
+                {% if dados.contexto_apresentacao %}
+                <div class="section-divider"></div>
+                <section class="contexto-section">
+                    <div class="container">
+                        <h2>Contexto da Apresentação</h2>
+                        <div class="contexto-box">
+                            <p>{{ dados.contexto_apresentacao|linebreaks }}</p>
+                        </div>
+                    </div>
+                </section>
+                {% endif %}
+
+            </div>
+        </section>
+
+        
+        <section class="summary-section tipo-discurso-section">
+            <div class="container">
+                <h2>Metodologia de Avaliação</h2>
+                <div class="tipo-discurso-card">
+                    <div class="tipo-discurso-icon">
+                        <i class="fas fa-balance-scale"></i>
+                    </div>
+                    <div class="tipo-discurso-content">
+                        {% if dados.tipo_discurso == 'tcc' %}
+                            <h3>Modalidade: Trabalho de Conclusão de Curso</h3>
+                            <p><strong>Ênfase no Conteúdo Acadêmico</strong> - Ponderação prioriza Foco no Tema (30%) e Clareza (30%), 
+                            com atenção secundária à Variação Vocal (15%) e Velocidade (15%). Nervosismo tem impacto reduzido (10%).</p>
+                        
+                        {% elif dados.tipo_discurso == 'palestra_tecnica' or dados.tipo_discurso == 'videoaula' %}
+                            <h3>Modalidade: Conteúdo Técnico</h3>
+                            <p><strong>Precisão Técnica</strong> - Máxima ênfase em Foco no Tema (35%), com equilíbrio entre 
+                            Clareza (20%) e Velocidade (20%). Variação Vocal (15%) e Nervosismo (10%) complementam a análise.</p>
+
+                        {% elif dados.tipo_discurso == 'palestra_motivacional' %}
+                            <h3>Modalidade: Palestra Motivacional</h3>
+                            <p><strong>Impacto Emocional</strong> - Prioridade para Variação Vocal (30%) e Velocidade (25%). 
+                            Foco no Tema tem menor peso (10%), com Nervosismo avaliado contextualmente (15%).</p>
+
+                        {% elif dados.tipo_discurso == 'pitch_comercial' or dados.tipo_discurso == 'pitch_startup' %}
+                            <h3>Modalidade: Apresentação Comercial</h3>
+                            <p><strong>Persuasão e Dinamismo</strong> - Ênfase em Variação Vocal (30%) e Velocidade (30%). 
+                            Foco no Tema é secundário (10%), com Nervosismo tendo impacto moderado (10%).</p>
+
+                        {% elif dados.tipo_discurso == 'explicacao_escolar' %}
+                            <h3>Modalidade: Conteúdo Educacional</h3>
+                            <p><strong>Equilíbrio Didático</strong> - Distribuição equilibrada entre Clareza (25%), 
+                            Foco no Tema (20%) e Nervosismo (20%), garantindo compreensão e confiança.</p>
+
+                        {% else %}
+                            <h3>Modalidade: Apresentação Geral</h3>
+                            <p><strong>Avaliação Balanceada</strong> - Distribuição uniforme entre os cinco critérios 
+                            (20% cada), exigindo desempenho consistente em todas as dimensões da comunicação.</p>
+                        
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        
+        <section class="summary-section friendly-section">
+            <div class="container">
+                <h2>Análise Detalhada por Critérios</h2>
+                <div class="friendly-grid">
+
+                    {% with s=scores.velocidade c=contrib.velocidade %}
+                    <div class="friendly-card">
+                        <h3>Ritmo de Fala</h3>
+                        <p class="friendly-value">
+                            {{ dados.wpm_real|floatformat:0 }} palavras/minuto • Nota: {{ s|floatformat:1 }}/10
+                        </p>
+                        <p class="friendly-text">
+                            {% if s < 6 %}
+                            Ritmo pode comprometer a compreensão em momentos específicos.
+                            {% elif s < 8 %}
+                            Velocidade adequada para a maior parte da apresentação.
+                            {% else %}
+                            Excelente controle de ritmo, facilitando o acompanhamento.
+                            {% endif %}
+                        </p>
+                        <p class="friendly-contrib">
+                            Contribuição para nota final: {{ c|mul10|floatformat:2 }} pontos
+                        </p>
+                        <p class="friendly-extra">
+                            O ritmo ideal equilibra clareza e engajamento, permitindo assimilação sem monotonia.
+                        </p>
+                    </div>
+                    {% endwith %}
+
+                    {% with s=scores.tangencia c=contrib.tangencia %}
+                    <div class="friendly-card">
+                        <h3>Coerência Temática</h3>
+                        <p class="friendly-value">
+                            Índice: {{ dados.tangencia_sim|floatformat:3 }} • Nota: {{ s|floatformat:1 }}/10
+                        </p>
+                        <p class="friendly-text">
+                            {% if s < 6 %}
+                            Desvios temáticos identificados em alguns segmentos.
+                            {% else %}
+                            Manutenção consistente do foco no tema principal.
+                            {% endif %}
+                        </p>
+                        <p class="friendly-contrib">
+                            Contribuição para nota final: {{ c|mul10|floatformat:2 }} pontos
+                        </p>
+                        <p class="friendly-extra">
+                            Mede a aderência ao tema proposto, essencial para comunicação eficaz.
+                        </p>
+                    </div>
+                    {% endwith %}
+
+                    {% with s=scores.clareza c=contrib.clareza %}
+                    <div class="friendly-card">
+                        <h3>Clareza na Comunicação</h3>
+                        <p class="friendly-value">
+                            Nota: {{ s|floatformat:1 }}/10
+                        </p>
+                        <p class="friendly-text">
+                            {% if s < 6 %}
+                            Oportunidades para maior objetividade e estruturação.
+                            {% else %}
+                            Comunicação clara e bem estruturada na maioria dos momentos.
+                            {% endif %}
+                        </p>
+                        <p class="friendly-contrib">
+                            Contribuição para nota final: {{ c|mul10|floatformat:2 }} pontos
+                        </p>
+                        <p class="friendly-extra">
+                            Avalia organização de ideias, vocabulário e estruturação frasal.
+                        </p>
+                    </div>
+                    {% endwith %}
+
+                    {% with s=scores.nervosismo c=contrib.nervosismo %}
+                    <div class="friendly-card">
+                        <h3>Controle Emocional</h3>
+                        <p class="friendly-value">
+                            Nota: {{ s|floatformat:1 }}/10
+                        </p>
+                        <p class="friendly-text">
+                            {% if s < 6 %}
+                            Sinais de ansiedade perceptíveis, porém administráveis.
+                            {% else %}
+                            Postura confiante e controle emocional adequado.
+                            {% endif %}
+                        </p>
+                        <p class="friendly-contrib">
+                            Contribuição para nota final: {{ c|mul10|floatformat:2 }} pontos
+                        </p>
+                        <p class="friendly-extra">
+                            Baseado em padrões de fala, pausas e fluência verbal.
+                        </p>
+                    </div>
+                    {% endwith %}
+
+                    {% with s=scores.prosodia c=contrib.prosodia %}
+                    <div class="friendly-card">
+                        <h3>Expressividade Vocal</h3>
+                        <p class="friendly-value">
+                            Nota: {{ s|floatformat:1 }}/10
+                        </p>
+                        <p class="friendly-text">
+                            {% if s < 6 %}
+                            Oportunidade para maior variação tonal e ênfase.
+                            {% else %}
+                            Boa modulação vocal, mantendo o interesse do público.
+                            {% endif %}
+                        </p>
+                        <p class="friendly-contrib">
+                            Contribuição para nota final: {{ c|mul10|floatformat:2 }} pontos
+                        </p>
+                        <p class="friendly-extra">
+                            Analisa entonação, pausas estratégicas e variação emocional.
+                        </p>
+                    </div>
+                    {% endwith %}
+
+                </div>
+            </div>
+        </section>
+
+        
+        <section class="summary-section comparison-section">
+            <div class="container">
+                <h2>Métricas Linguísticas Avançadas</h2>
+
+                <div class="linguagem-grid">
+
+                    <div class="linguagem-item">
+                        <span class="metric-label">Diversidade Lexical</span>
+                        <span class="metric-value">{{ ling.token_diversity|floatformat:3 }}</span>
+                        <p class="metric-explain">
+                            Variedade vocabular utilizada durante a apresentação.
+                        </p>
+                        <p class="metric-explain">
+                            {% if ling.token_diversity < 0.40 %}
+                            Vocabulário repetitivo. Sugere expansão de repertório.
+                            {% elif ling.token_diversity < 0.60 %}
+                            Diversidade adequada, com espaço para enriquecimento.
+                            {% else %}
+                            Excelente variedade lexical e riqueza vocabular.
+                            {% endif %}
+                        </p>
+                    </div>
+
+                    <div class="linguagem-item">
+                        <span class="metric-label">Redundância Semântica</span>
+                        <span class="metric-value">{{ ling.semantic_redundancy|floatformat:3 }}</span>
+                        <p class="metric-explain">
+                            Repetição de conceitos e ideias similares.
+                        </p>
+                        <p class="metric-explain">
+                            {% if ling.semantic_redundancy > 0.75 %}
+                            Alta repetição de ideias. Estruturação pode ser otimizada.
+                            {% elif ling.semantic_redundancy > 0.50 %}
+                            Repetição moderada, dentro de parâmetros aceitáveis.
+                            {% else %}
+                            Excelente progressão de ideias sem redundâncias.
+                            {% endif %}
+                        </p>
+                    </div>
+
+                    <div class="linguagem-item">
+                        <span class="metric-label">Clareza Estrutural</span>
+                        <span class="metric-value">{{ ling.clarity|floatformat:3 }}</span>
+                        <p class="metric-explain">
+                            Organização e clareza na construção frasal.
+                        </p>
+                        <p class="metric-explain">
+                            {% if ling.clarity < 0.40 %}
+                            Estrutura frasal compromete a compreensão.
+                            {% elif ling.clarity < 0.70 %}
+                            Clareza adequada, com oportunidades de refinamento.
+                            {% else %}
+                            Excelente articulação e estruturação de pensamento.
+                            {% endif %}
+                        </p>
+                    </div>
+
+                    <div class="linguagem-item">
+                        <span class="metric-label">Dinâmica Vocal</span>
+                        <span class="metric-value">{{ ling.prosody_proxy|floatformat:3 }}</span>
+                        <p class="metric-explain">
+                            Variação tonal e expressividade na entrega.
+                        </p>
+                        <p class="metric-explain">
+                            {% if ling.prosody_proxy < 0.40 %}
+                            Entonação plana. Oportunidade para maior expressividade.
+                            {% elif ling.prosody_proxy < 0.70 %}
+                            Boa variação, com potencial para maior impacto.
+                            {% else %}
+                            Excelente modulação e presença vocal.
+                            {% endif %}
+                        </p>
+                    </div>
+
+                    <div class="linguagem-item">
+                        <span class="metric-label">Estabilidade Emocional</span>
+                        <span class="metric-value">{{ ling.human_nervousness|floatformat:3 }}</span>
+                        <p class="metric-explain">
+                            Indicadores de controle emocional e confiança.
+                        </p>
+                        <p class="metric-explain">
+                            {% if ling.human_nervousness > 0.70 %}
+                            Ansiedade perceptível. Técnicas de relaxamento podem ajudar.
+                            {% elif ling.human_nervousness > 0.40 %}
+                            Controle adequado, com momentos de tensão esperados.
+                            {% else %}
+                            Excelente controle emocional e postura confiante.
+                            {% endif %}
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        
+        <section class="summary-section technical-section">
+            <div class="container">
+                <h2>Informações Técnicas</h2>
+
+                <div class="technical-grid">
+                    <div class="technical-card">
+                        <h3>Dados de Processamento</h3>
+                        <ul class="technical-list">
+                            <li>Duração total: <strong>{{ dados.duration_total|floatformat:1 }}s</strong></li>
+                            <li>Tempo de fala: <strong>{{ dados.duration_presenter_real|floatformat:1 }}s</strong></li>
+                            <li>Segmentos analisados: <strong>{{ dados.segmentos_usados }}</strong></li>
+                            <li>Total de segmentos: <strong>{{ dados.segmentos_totais }}</strong></li>
+                        </ul>
+                        <div class="technical-explain">
+                            <p class="technical-explain-title">Por que dividir em segmentos</p>
+                            <p class="technical-explain-text">
+                                A apresentação é dividida em trechos menores para que o sistema consiga analisar cada parte
+                                com mais precisão. Isso ajuda a separar momentos de introdução, explicação, exemplos e conclusão,
+                                além de facilitar o descarte de trechos que não são do apresentador quando necessário.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="technical-card">
+                        <h3>Processamento SALA</h3>
+                        <ul class="technical-list">
+                            <li>Diarização: <strong>{{ dados.analisado }}</strong></li>
+                            <li>Tempo de análise: <strong>{{ dados.tempo_execucao|floatformat:2 }}s</strong></li>
+                        </ul>
+                        <div class="technical-explain">
+                            <p class="technical-explain-title">O que é diarização</p>
+                            <p class="technical-explain-text">
+                                Diarização é o processo de identificar quem está falando em cada parte do áudio.
+                                O SALA usa isso para separar o que é fala do apresentador e o que é fala da banca.
+                                Quando o relatório indica que o áudio está limpo para o apresentador, significa que
+                                quase todo o material analisado de fato veio da sua fala, sem interferência relevante
+                                de outras pessoas.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="technical-card">
+                        <h3>Arquivos Processados</h3>
+                        <ul class="technical-list">
+                            <li>Entrada principal:</li>
+                            <li><span class="path-text">{{ dados.input }}</span></li>
+                            <li>Áudio processado:</li>
+                            <li><span class="path-text">{{ dados.audio }}</span></li>
+                        </ul>
+                        <div class="technical-explain">
+                            <p class="technical-explain-title">Como esses arquivos são usados</p>
+                            <p class="technical-explain-text">
+                                O vídeo é convertido em áudio tratado para remoção de ruídos e ajustes técnicos.
+                                A partir desse áudio, são feitos a transcrição, a separação por falantes e todos os
+                                cálculos que resultam nas métricas e notas exibidas neste relatório.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        
+        <section class="summary-section transcription-section">
+            <div class="container">
+                <h2>Transcrição Completa</h2>
+                {% with trans=dados.transcricao|default:dados.text %}
+                <div class="transcription-box">
+                    {{ trans }}
+                </div>
+                {% endwith %}
+            </div>
+        </section>
+
+        
+        <section class="summary-section">
+            <div class="container">
+                <h2>Plano de Desenvolvimento</h2>
+
+                <div class="summary-grid">
+                    <div class="summary-card">
+                        <div class="summary-icon">
+                            <i class="fas fa-bullseye"></i>
+                        </div>
+                        <h3 class="summary-title">Foco de Melhoria</h3>
+                        <ul class="summary-text summary-list">
+                            {% for item in fb.principais_falhas %}
+                                <li>{{ item|default:""|lstrip:"•"|lstrip:"-"|lstrip:"*"|strip }}</li>
+                            {% empty %}
+                                <li>Manutenção das competências atuais com refinamento contínuo</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+
+                    <div class="summary-card">
+                        <div class="summary-icon">
+                            <i class="fas fa-tools"></i>
+                        </div>
+                        <h3 class="summary-title">Ações Recomendadas</h3>
+                        <ul class="summary-text summary-list">
+                            {% for item in fb.acoes_curto_prazo %}
+                                <li>{{ item|slice:":1" }}{{ item|slice:"1:" }}</li>
+                            {% empty %}
+                                <li>Prática regular com gravação e autoavaliação</li>
+                                <li>Estruturação prévia do roteiro</li>
+                                <li>Treino de técnicas de respiração e pausas</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+                {% if fb.vicios_linguagem %}
+                <div class="summary-detailed mt-20">
+                    <h3 class="text-center">Padrões Linguísticos Identificados</h3>
+                    <div class="vicios-container">
+                        <ul class="vicios-list">
+                            {% for vicio in fb.vicios_linguagem %}
+                            <li class="vicio-tag">{{ vicio }}</li>
+                            {% empty %}
+                            <li class="vicio-tag-none">Nenhum padrão repetitivo identificado</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                {% endif %}
+
+            </div>
+        </section>
+
+    {% endwith %}
+    {% endwith %}
+    {% endwith %}
+    {% endwith %}
+    {% endwith %}
+    </main>
+
+</body>
+</html>

@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Nova Senha - S.A.L.A{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/redefinir_senha.css' %}">
+{% endblock %}
+{% block content %}
+<main class="main-content">
+  <div class="recovery-container">
+    <div class="form-section">
+      <h2 class="form-title">Definir Nova Senha</h2>
+      <p class="form-subtitle">Crie uma nova senha segura para sua conta.</p>
+
+      {% if messages %}
+        {% for message in messages %}
+          <p style="color:red;">{{ message }}</p>
+        {% endfor %}
+      {% endif %}
+
+      <form method="post" action="">
+        {% csrf_token %}
+        
+        <div class="form-group">
+          <label class="input-label">Nova Senha</label>
+          <div class="input-wrapper">
+            <i class="fa-solid fa-lock input-icon"></i>
+            <input type="password" id="senha" name="senha" class="form-input" placeholder="Digite a nova senha" required>
+            <i class="fa-regular fa-eye toggle-password" data-target="senha"></i>
+          </div>
+        </div>
+
+        <ul class="password-reqs-list" id="passwordReqs">
+          <li class="req-item" data-check="length">Mínimo de 8 caracteres</li>
+          <li class="req-item" data-check="uppercase">Pelo menos uma letra maiúscula</li>
+          <li class="req-item" data-check="number">Pelo menos um número</li>
+          <li class="req-item" data-check="special">Pelo menos um caractere especial</li>
+        </ul>
+
+        <div class="form-group">
+          <label class="input-label">Confirmar Nova Senha</label>
+          <div class="input-wrapper">
+            <i class="fa-solid fa-lock input-icon"></i>
+            <input type="password" id="confirmar-senha" name="confirmar_senha" class="form-input" placeholder="Digite sua nova senha" required>
+            <i class="fa-regular fa-eye toggle-password" data-target="confirmar-senha"></i>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-submit" id="submitBtn" disabled>Atualizar Senha</button>
+      </form>
+
+      <p class="login-link">
+        <a href="{% url 'login' %}">Voltar ao login</a>
+      </p>
+    </div>
+
+    <div class="info-section">
+        <h2 class="info-title">Recuperação Segura</h2>
+        <p class="info-description">
+            Sua segurança é nossa prioridade. O processo de recuperação de senha é totalmente seguro.
+        </p>
+        <ul class="features-list">
+            <li>
+                <i class="fa-solid fa-circle-check"></i>
+                <span>Processo de recuperação seguro e criptografado</span>
+            </li>
+            <li>
+                <i class="fa-solid fa-link"></i>
+                <span>Link de recuperação válido por 24 horas</span>
+            </li>
+            <li>
+                <i class="fa-solid fa-envelope-open-text"></i>
+                <span>Instruções enviadas diretamente para seu e-mail</span>
+            </li>
+            <li>
+                <i class="fa-solid fa-shield-halved"></i>
+                <span>Proteção contra tentativas de acesso não autorizadas</span>
+            </li>
+        </ul>
+    </div>
+  </div>
+  <script src="{% static 'js/redefinir_senha_confirmar.js' %}"></script>
+</main>
+<script src="{% static 'js/auth_password.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/enviar-video.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+{% endblock %}
+{% block content %}
+<main class="container-principal">
+  <div class="hero-container">
+    <h1 class="titulo-principal">Treine suas Apresentações</h1>
+    <p class="subtitulo">
+      Pratique suas habilidades de apresentação e receba feedback detalhado da nossa inteligência artificial.
+    </p>
+  </div>
+
+  <div class="container-upload">
+    <h2>Enviar Vídeo</h2>
+    <p class="formatos-suportados">
+      Formatos suportados: MP4, MOV, AVI.
+    </p>
+
+    <input type="text" placeholder="Tema da apresentação" class="input-tema" id="tema-upload">
+
+    <select id="tipo-discurso" class="select-discurso">
+        <option value="" disabled selected>Selecione o tipo de apresentação</option>
+        <option value="tcc">TCC / Defesa acadêmica</option>
+        <option value="palestra_tecnica">Palestra técnica</option>
+        <option value="palestra_motivacional">Palestra motivacional</option>
+        <option value="pitch_comercial">Pitch comercial</option>
+        <option value="pitch_startup">Pitch startup</option>
+        <option value="videoaula">Videoaula</option>
+        <option value="explicacao_escolar">Explicação escolar</option>
+        <option value="apresentacao_comercial_detalhada">Apresentação comercial detalhada</option>
+        <option value="livre">Livre</option>
+    </select>
+
+    <textarea class="input-contexto" id="contexto-upload" placeholder="Explique brevemente o tema da sua apresentação (opcional)"></textarea>
+
+    <div class="area-upload" id="area-upload">
+      <i class="fas fa-cloud-arrow-up" id="upload-icon"></i>
+      <p id="upload-text">Arraste e solte seu vídeo aqui</p>
+      
+      <span class="divisor-ou" id="upload-separator">ou</span>
+      
+      
+      <label for="input-arquivo" class="btn btn-selecionar-arquivo" id="label-input-arquivo">
+        <i class="fas fa-file-upload"></i>
+        Selecionar Arquivo
+      </label>
+      <input type="file" id="input-arquivo" accept="video/mp4,video/quicktime,video/x-msvideo" hidden>
+
+      
+      <button type="button" class="btn btn-desanexar-arquivo" id="btn-desanexar">
+        <i class="fas fa-times"></i>
+        Desanexar Arquivo
+      </button>
+    </div>
+
+    <div class="botoes-navegacao">
+      <button type="button" class="btn btn-enviar-video" id="btn-enviar-video">Enviar vídeo</button>
+      <a href="{% url 'treino' %}" class="btn btn-voltar-upload" id="btn-voltar">
+        <i class="fas fa-arrow-left"></i> Voltar
+      </a>
+    </div>
+  </div>
+
+  <div id="loader-sala" class="loader-sala">
+    <div class="loader-box">
+        <div class="loader-title">Analisando...</div>
+        <div class="loader-bar"><div class="loader-progress" id="loader-progress"></div></div>
+        <div class="loader-percent" id="loader-percent">0%</div>
+    </div>
+  </div>
+</main>
+<script src="{% static 'js/enviar_video.js' %}"></script>
+{% endblock %}

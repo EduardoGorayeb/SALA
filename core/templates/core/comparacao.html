@@ -1,0 +1,185 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Comparação de Relatórios - SALA{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/comparacao.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1 class="titulo-principal">Comparação de Relatórios</h1>
+        <p class="subtitulo">Selecione os relatórios que deseja comparar para visualizar a evolução das suas apresentações.</p>
+    </div>
+
+    <div class="comparison-container">
+        <div class="reports-list">
+            <h2>Seus Relatórios</h2>
+            <div class="reports-grid">
+                {% for relatorio in relatorios_json %}
+                <div class="report-card" data-id="{{ relatorio.id }}" data-score="{{ relatorio.final_score }}" data-date="{{ relatorio.criado_em }}" data-tema="{{ relatorio.tema }}">
+                    <div class="report-header">
+                        <input type="checkbox" class="report-checkbox" id="report-{{ relatorio.id }}">
+                        <label for="report-{{ relatorio.id }}" title="{{ relatorio.tema }}">
+                            <h3>{{ relatorio.tema }}</h3>
+                        </label>
+                    </div>
+                    <div class="report-details">
+                        <p><strong>Data:</strong> {{ relatorio.criado_em }}</p>
+                        <p><strong>Tipo:</strong> {{ relatorio.tipo_discurso }}</p>
+                        <p><strong>Nota Final:</strong> {{ relatorio.final_score|floatformat:1 }}/10</p>
+                    </div>
+                </div>
+                {% empty %}
+                <p>Você ainda não possui relatórios para comparar.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="comparison-chart">
+            <h2>Gráfico de Comparação</h2>
+            <div class="chart-container">
+                <canvas id="comparisonChart"></canvas>
+            </div>
+            <div class="chart-info">
+                <p>Selecione pelo menos 2 relatórios para visualizar o gráfico de evolução.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const checkboxes = document.querySelectorAll('.report-checkbox');
+    const reportCards = document.querySelectorAll('.report-card');
+    const chartCanvas = document.getElementById('comparisonChart');
+    let chart = null;
+
+    function updateChart() {
+        const selectedReports = [];
+        checkboxes.forEach(checkbox => {
+            if (checkbox.checked) {
+                const card = checkbox.closest('.report-card');
+                selectedReports.push({
+                    id: card.dataset.id,
+                    tema: card.dataset.tema,
+                    score: parseFloat(card.dataset.score),
+                    date: card.dataset.date
+                });
+            }
+        });
+
+        if (selectedReports.length < 2) {
+            if (chart) {
+                chart.destroy();
+                chart = null;
+            }
+            document.querySelector('.chart-info').textContent = 'Selecione pelo menos 2 relatórios para visualizar o gráfico de evolução.';
+            return;
+        }
+
+        // Ordenar por data
+        selectedReports.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+        const labels = selectedReports.map(r => {
+            if (r.tema.length > 25) {
+                return r.tema.substring(0, 22) + '...';
+            }
+            return r.tema;
+        });
+        const fullLabels = selectedReports.map(r => r.tema); // Para tooltips
+        const scores = selectedReports.map(r => r.score);
+
+        if (chart) {
+            chart.destroy();
+        }
+
+        chart = new Chart(chartCanvas, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Nota Final',
+                    data: scores,
+                    borderColor: '#0f9d58',
+                    backgroundColor: 'rgba(15, 157, 88, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4,
+                    pointBackgroundColor: '#0f9d58',
+                    pointBorderColor: '#ffffff',
+                    pointBorderWidth: 2,
+                    pointRadius: 6,
+                    pointHoverRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            title: function(context) {
+                                return fullLabels[context[0].dataIndex];
+                            },
+                            label: function(context) {
+                                return `Nota: ${context.parsed.y.toFixed(1)}/10`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 10,
+                        ticks: {
+                            stepSize: 1
+                        },
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.1)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.1)'
+                        }
+                    }
+                },
+                elements: {
+                    point: {
+                        hoverBorderWidth: 3
+                    }
+                }
+            }
+        });
+
+        document.querySelector('.chart-info').textContent = `Comparando ${selectedReports.length} relatórios selecionados.`;
+    }
+
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', updateChart);
+    });
+
+    // Add click event to entire report cards
+    reportCards.forEach(card => {
+        card.addEventListener('click', function(e) {
+            // Don't trigger if clicking on the checkbox itself
+            if (e.target.type !== 'checkbox') {
+                const checkbox = card.querySelector('.report-checkbox');
+                checkbox.checked = !checkbox.checked;
+                updateChart();
+            }
+        });
+    });
+});
+</script>
+
+
+{% endblock %}

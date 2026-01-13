@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+S.A.L.A. - Histórico de Relatórios
+{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/historico.css' %}">
+<script>
+    const RELATORIOS = {{ relatorios_json|safe }};
+</script>
+<script src="{% static 'js/historico.js' %}" defer></script>
+{% endblock %}
+
+{% block content %}
+<main class="historico-principal">
+
+    <section class="historico-header">
+        <h1 class="titulo-principal">Histórico de Relatórios</h1>
+        <p class="subtitulo">Acompanhe toda sua evolução com base nas suas apresentações anteriores.</p>
+    </section>
+
+    
+    <section class="comparacao-section">
+        <div class="container">
+            <div class="comparacao-content">
+                <h2>Compare seus Relatórios</h2>
+                <p>Visualize a evolução das suas apresentações através de gráficos comparativos.</p>
+                <a href="{% url 'comparacao_relatorios' %}" class="btn-comparacao">
+                    <i class="fas fa-chart-line"></i>
+                    Comparar Relatórios
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="filtros-relatorios">
+        <div class="campo-filtro">
+            <i class="fas fa-search"></i>
+            <input id="filtro-busca" type="text" placeholder="Buscar relatórios...">
+        </div>
+
+        <div class="campo-filtro">
+            <select id="filtro-tema">
+                <option value="">Todos os temas</option>
+            </select>
+        </div>
+
+        <div class="campo-filtro">
+            <select id="filtro-ordenacao">
+                <option value="recentes">Mais recentes</option>
+                <option value="antigos">Mais antigos</option>
+                <option value="maior-nota">Maior nota</option>
+            </select>
+        </div>
+
+        <div class="campo-filtro">
+            <button id="btn-entrar-modo-exclusao" class="btn-modo-exclusao" title="Selecionar relatórios para excluir">
+                <i class="fas fa-trash"></i> Excluir Relatórios
+            </button>
+        </div>
+    </section>
+
+    <section id="barra-exclusao" class="barra-exclusao" style="display: none;">
+        <div class="barra-exclusao-content">
+            <span id="contador-selecionados">0 selecionado(s)</span>
+            <button id="btn-confirmar-exclusao" class="btn-confirmar-exclusao">
+                <i class="fas fa-trash"></i> Excluir Selecionados
+            </button>
+            <button id="btn-cancelar-exclusao" class="btn-cancelar-exclusao">
+                <i class="fas fa-times"></i> Cancelar
+            </button>
+        </div>
+    </section>
+
+    <div class="container">
+        
+        <section id="grid-relatorios" class="grid-relatorios"></section>
+
+        <section id="paginacao" class="paginacao"></section>
+    </div>
+</main>
+{% endblock %}

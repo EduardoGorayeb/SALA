@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+S.A.L.A. - Recuperar Senha
+{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/redefinir_senha.css' %}">
+{% endblock %}
+{% block content %}
+<main class="main-content">
+    <div class="recovery-container">
+        
+        <div class="form-section">
+            <h2 class="form-title">Recuperar Senha</h2>
+            <p class="form-subtitle">
+                Informe seu e-mail para receber instruções de redefinição.
+            </p>
+
+            <form method="post" action="{% url 'redefinir_senha' %}" class="recovery-form">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label class="input-label">E-mail</label>
+                    <div class="input-wrapper">
+                      <i class="fa-regular fa-envelope input-icon"></i>
+                      <input
+                        type="email"
+                        name="email"
+                        class="form-input"
+                        placeholder="seu@email.com"
+                        required
+                      />
+                    </div>
+                  </div>
+                  
+                  
+                <button type="submit" class="btn-submit">Enviar link de Recuperação</button>
+              </form>
+
+            <p class="login-link">
+                Lembrou sua senha? <a href="{% url 'login' %}">Fazer login</a>
+            </p>
+        </div>
+
+        <div class="info-section">
+            <h2 class="info-title">Recuperação Segura</h2>
+            <p class="info-description">
+                Sua segurança é nossa prioridade. O processo de recuperação de senha é totalmente seguro.
+            </p>
+            <ul class="features-list">
+                <li>
+                    <i class="fa-solid fa-circle-check"></i>
+                    <span>Processo de recuperação seguro e criptografado</span>
+                </li>
+                <li>
+                    <i class="fa-solid fa-link"></i>
+                    <span>Link de recuperação válido por 24 horas</span>
+                </li>
+                <li>
+                    <i class="fa-solid fa-envelope-open-text"></i>
+                    <span>Instruções enviadas diretamente para seu e-mail</span>
+                </li>
+                <li>
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <span>Proteção contra tentativas de acesso não autorizadas</span>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        {% if messages %}
+        {% for message in messages %}
+            {% if message.tags == 'success' %}
+            Swal.fire({
+                icon: 'success',
+                title: 'Instruções enviadas!',
+                text: 'Enviamos um link para o seu e-mail. Confira sua caixa de entrada.',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#0F9D58'
+            });
+            {% elif message.tags == 'error' %}
+            Swal.fire({
+                icon: 'error',
+                title: 'Erro',
+                text: '{{ message }}',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#d33'
+            });
+            {% endif %}
+        {% endfor %}
+        {% endif %}
+    });
+    </script>
+    {% if reset_sent %}
+    <script>
+        window.RESET_SENT = true;
+        window.RESET_EMAIL = "{{ email|escapejs }}";
+        window.RESET_LINK = "{{ reset_link|escapejs }}";
+    </script>
+    {% else %}
+    <script>
+        window.RESET_SENT = false;
+    </script>
+    {% endif %}
+
+    <script src="{% static 'js/redefinir_senha.js' %}"></script>
+</main>
+{% endblock %}

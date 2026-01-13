@@ -1,0 +1,264 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>S.A.L.A. - Aprimore suas apresentações com inteligência artificial</title>
+    <link rel="icon" type="image/png" href="{% static 'img/micro.png' %}" />
+    <script>
+      (function() {
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+          document.documentElement.classList.add('dark-mode');
+        }
+      })();
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <link rel="stylesheet" href="{% static 'css/base.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/theme.css' %}" />
+    {% block head %}{% endblock %}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </head>
+
+  <body>
+    <header class="main-header">
+      <div class="container header-container">
+        <a href="{% url 'index' %}" class="logo">
+          <img
+            src="{% static 'img/micro2.png' %}"
+            alt="Logo da S.A.L.A."
+            class="logo-imagem"
+          />
+          <span>S.A.L.A<span id="spanbanner">.</span></span>
+        </a>
+
+        <nav class="main-nav">
+          <ul>
+            <li><a href="{% url 'index' %}">Página Inicial</a></li>
+            <li><a href="{% url 'treino' %}">Treino</a></li>
+            <li><a href="{% url 'historico' %}">Histórico de Relatórios</a></li>
+          </ul>
+        </nav>
+
+        <div class="theme-controls">
+          <div class="header-buttons">
+            {% if user.is_authenticated %}
+            <div class="user-menu" id="userMenu">
+              <button class="user-btn" id="userBtn" aria-haspopup="true" aria-expanded="false" type="button">
+                <span class="user-avatar">
+                  {% if user.first_name %}
+                    {{ user.first_name|slice:":1"|upper }}
+                  {% else %}
+                    {{ user.email|slice:":1"|upper }}
+                  {% endif %}
+                </span>
+                <span class="user-name">{{ user.email }}</span>
+                <i class="fa-solid fa-caret-down"></i>
+              </button>
+
+              <ul class="user-dropdown" id="userDropdown" aria-hidden="true">
+                <li><a class="logout" href="{% url 'account_logout' %}">Sair</a></li>
+              </ul>
+            </div>
+            {% else %}
+              <a href="{% url 'login' %}" class="btn Login-button">Login</a>
+            {% endif %}
+          </div>
+          <div class="font-controls">
+            <button id="decrease-font" class="font-btn" aria-label="Diminuir fonte">
+              A-
+            </button>
+            <span class="font-label">Fonte</span>
+            <button id="increase-font" class="font-btn" aria-label="Aumentar fonte">
+              A+
+            </button>
+          </div>
+          <label for="theme" class="theme">
+            <span class="theme__toggle-wrap">
+              <input
+                id="theme"
+                class="theme__toggle"
+                type="checkbox"
+                role="switch"
+                name="theme"
+                value="dark"
+              />
+              <span class="theme__fill"></span>
+              <span class="theme__icon">
+                <span class="theme__icon-part"></span>
+                <span class="theme__icon-part"></span>
+                <span class="theme__icon-part"></span>
+                <span class="theme__icon-part"></span>
+                <span class="theme__icon-part"></span>
+                <span class="theme__icon-part"></span>
+                <span class="theme__icon-part"></span>
+                <span class="theme__icon-part"></span>
+                <span class="theme__icon-part"></span>
+              </span>
+            </span>
+          </label>
+        </div>
+
+        <button class="menu-hamburger" aria-label="Abrir menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </header>
+
+    
+    <div class="nav-mobile">
+      <div class="mobile-header">
+        <button class="close-menu" aria-label="Fechar menu">
+          <i class="fas fa-times"></i>
+        </button>
+        <div class="mobile-user-info">
+          {% if user.is_authenticated %}
+            <div class="mobile-user-details">
+              <span class="mobile-user-name">
+                {% if user.first_name %}
+                  {{ user.first_name }}
+                {% else %}
+                  {{ user.email }}
+                {% endif %}
+              </span>
+              <span class="mobile-user-email">{{ user.email }}</span>
+            </div>
+          {% else %}
+            <div class="mobile-user-guest">
+              <i class="fas fa-user"></i>
+              <span>Visitante</span>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <nav class="mobile-nav">
+        <ul>
+          <li><a href="{% url 'index' %}"><i class="fas fa-home"></i>Página Inicial</a></li>
+          <li><a href="{% url 'treino' %}"><i class="fas fa-dumbbell"></i>Treino</a></li>
+          <li><a href="{% url 'historico' %}"><i class="fas fa-history"></i>Histórico de Relatórios</a></li>
+        </ul>
+      </nav>
+
+      <div class="mobile-controls">
+        <div class="mobile-theme-section">
+          <h4>Configurações</h4>
+          <div class="mobile-control-group">
+            <span class="mobile-control-label"><i class="fas fa-moon"></i>Modo Escuro</span>
+            <label for="mobile-theme" class="mobile-theme">
+              <input
+                id="mobile-theme"
+                class="mobile-theme__toggle"
+                type="checkbox"
+                role="switch"
+                name="mobile-theme"
+                value="dark"
+              />
+              <span class="mobile-theme__slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="mobile-actions">
+          {% if user.is_authenticated %}
+            <a href="{% url 'account_logout' %}" class="mobile-logout-btn">
+              <i class="fas fa-sign-out-alt"></i>Sair
+            </a>
+          {% else %}
+            <a href="{% url 'login' %}" class="mobile-login-btn">
+              <i class="fas fa-sign-in-alt"></i>Login
+            </a>
+            <a href="{% url 'cadastro' %}" class="mobile-register-btn">
+              <i class="fas fa-user-plus"></i>Cadastre-se
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="menu-overlay"></div>
+
+    {% block content %}{% endblock %}
+
+    <footer class="main-footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-column footer-about">
+            <a href="{% url 'index' %}" class="footer-logo">
+              <img
+                src="{% static 'img/micro.png' %}"
+                alt="Logo da S.A.L.A."
+                class="logo-imagem"
+              />
+              S.A.L.A<span id="spanbanner">.</span>
+            </a>
+            <p>
+              Revolucionando a forma como as pessoas desenvolvem habilidades de
+              apresentação através de inteligência artificial.
+            </p>
+            <div class="footer-socials">
+              <a href="#"><i class="fab fa-linkedin-in"></i></a>
+              <a href="#"><i class="fab fa-whatsapp"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+          </div>
+
+          <div class="footer-column footer-links">
+            <h4 class="footer-title">Links Rápidos</h4>
+            <ul>
+              <li><a href="{% url 'index' %}">Início</a></li>
+              <li><a href="#about">Sobre</a></li>
+              <li><a href="#features">Análises</a></li>
+              <li><a href="#how-to">Como Usar</a></li>
+              <li><a href="#faq">FAQ</a></li>
+              <li><a href="{% url 'login' %}">Login</a></li>
+              <li><a href="{% url 'cadastro' %}">Cadastre-se</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-column footer-links">
+            <h4 class="footer-title">Nossos Serviços</h4>
+            <ul>
+              <li><a href="#">Análise de Apresentações</a></li>
+              <li><a href="#">Feedbacks Personalizados</a></li>
+              <li><a href="#">Relatórios Detalhados</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-column footer-newsletter">
+            <h4 class="footer-title">Newsletter</h4>
+            <p>Inscreva-se para receber novidades e dicas para melhorar suas apresentações.</p>
+            <form class="newsletter-form" method="post" action="#">
+              {% csrf_token %}
+              <input type="email" name="email" placeholder="Seu email" required />
+              <button type="submit"><i class="fa-solid fa-paper-plane"></i></button>
+            </form>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <p>&copy; 2025 S.A.L.A. – Todos os direitos reservados.</p>
+        </div>
+      </div>
+    </footer>
+
+    {% block extra_js %}{% endblock extra_js %}
+
+
+
+    <script src="{% static 'js/menu.js' %}"></script>
+    <script defer src="{% static 'js/darkmode.js' %}"></script>
+  </body>
+</html>

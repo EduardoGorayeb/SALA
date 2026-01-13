@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load socialaccount %}
+{% block title %}Criar Conta - S.A.L.A{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/auth_base.css' %}">
+<link rel="stylesheet" href="{% static 'css/cadastro.css' %}">
+{% endblock %}
+{% block content %}
+<main class="main-content">
+  <div class="signup-container">
+    <div class="form-panel">
+      <h1 class="form-title">Criar Conta</h1>
+      <p class="form-subtitle">Junte-se à nossa comunidade e comece a melhorar suas apresentações</p>
+
+      <form id="signupForm" method="post" action="{% url 'cadastro' %}">
+        {% csrf_token %}
+
+        <div class="form-group">
+          <label class="input-label">Nome Completo</label>
+          <div class="input-wrapper">
+            <i class="fa-solid fa-user input-icon"></i>
+            <input type="text" id="nome" name="nome" class="form-input" placeholder="Seu nome completo" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="input-label">E-mail</label>
+          <div class="input-wrapper">
+            <i class="fa-regular fa-envelope input-icon"></i>
+            <input type="email" id="email" name="email" class="form-input" placeholder="seu@email.com" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="input-label">Senha</label>
+          <div class="input-wrapper">
+            <i class="fa-solid fa-lock input-icon"></i>
+            <input type="password" id="senha" name="senha" class="form-input" placeholder="Crie uma senha segura" required />
+            <i class="fa-regular fa-eye toggle-password" data-target="senha"></i>
+          </div>
+        </div>
+
+        <ul class="password-reqs-list" id="passwordReqs">
+          <li class="req-item" data-check="length">Mínimo de 8 caracteres</li>
+          <li class="req-item" data-check="uppercase">Pelo menos uma letra maiúscula</li>
+          <li class="req-item" data-check="number">Pelo menos um número</li>
+          <li class="req-item" data-check="special">Pelo menos um caractere especial</li>
+        </ul>
+
+        <div class="form-group">
+          <label class="input-label">Confirmar Senha</label>
+          <div class="input-wrapper">
+            <i class="fa-solid fa-lock input-icon"></i>
+            <input type="password" id="confirmar-senha" name="confirmar_senha" class="form-input" placeholder="Digite sua senha novamente" required />
+            <i class="fa-regular fa-eye toggle-password" data-target="confirmar-senha"></i>
+          </div>
+        </div>
+
+        <div class="terms-group">
+          <input type="checkbox" id="termos" class="terms-checkbox" required />
+          <label for="termos">
+            Eu concordo com os
+            <a href="#" class="terms-link">Termos de Serviço</a> e
+            <a href="#" class="terms-link">Política de Privacidade</a>
+          </label>
+        </div>
+
+        <button id="submitBtn" type="submit" class="btn-submit" disabled>Criar Conta</button>
+
+        <div class="separator">ou</div>
+
+        <div class="social-buttons">
+          <a href="{% provider_login_url 'google' method='oauth2' %}" class="google-btn" role="button">
+            <i class="fab fa-google google-icon" aria-hidden="true"></i>
+            Cadastrar com Google
+          </a>
+        </div>
+      </form>
+
+      <div class="login-redirect-text">
+        Já tem uma conta? <a href="{% url 'login' %}" class="terms-link">Faça login aqui</a>
+      </div>
+    </div>
+
+    <div class="info-panel">
+      <h1 class="info-title">Junte-se a Nós!</h1>
+      <p class="info-text">Crie sua conta e descubra como podemos ajudar você a se tornar um apresentador excepcional.</p>
+      <ul class="info-list">
+        <li class="info-list-item">
+          <i class="fa-solid fa-chart-line info-list-icon"></i>
+          <span>Acompanhe seu progresso detalhadamente</span>
+        </li>
+        <li class="info-list-item">
+          <i class="fa-solid fa-star info-list-icon"></i>
+          <span>Receba feedbacks personalizados da IA</span>
+        </li>
+        <li class="info-list-item">
+          <i class="fa-solid fa-trophy info-list-icon"></i>
+          <span>Compare seu desempenho ao longo do tempo</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</main>
+
+{% if cadastro_sucesso %}
+<script>
+window.VERIFY_LINK = "{{ verify_link|escapejs }}";
+window.VERIFY_NAME = "{{ nome|default:''|escapejs }}";
+window.VERIFY_EMAIL = "{{ email|default:''|escapejs }}";
+window.CADASTRO_SUCESSO = true;
+</script>
+{% else %}
+<script>window.CADASTRO_SUCESSO = false;</script>
+{% endif %}
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+
+<script src="{% static 'js/auth_password.js' %}"></script>
+<script src="{% static 'js/cadastro.js' %}"></script>
+
+{% endblock %}

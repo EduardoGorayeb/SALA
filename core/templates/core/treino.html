@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+S.A.L.A. - Treine suas Apresentações
+{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/treino.css' %}">
+{% endblock %}
+{% block content %}
+<main class="secao-treino">
+    <div class="hero-treino">
+        <h1 class="titulo-principal">Treine suas Apresentações</h1>
+        <p class="subtitulo">
+            Pratique suas habilidades de apresentação e receba feedback detalhado da nossa inteligência artificial para melhorar seu desempenho.
+        </p>
+    </div>
+
+    <h2 class="titulo-secao">Como você gostaria de enviar sua apresentação?</h2>
+
+    <div class="container-opcoes">
+        <div class="card-opcao">
+            <div class="card-icone-wrapper">
+                <i class="fa-solid fa-video"></i>
+            </div>
+            <h3 class="card-titulo">Gravar Agora</h3>
+            <p class="card-descricao">
+                Use sua câmera e microfone para gravar uma nova apresentação diretamente pelo site.
+            </p>
+            <a href="{% url 'gravar' %}" class="botao btn-primario">Gravar Apresentação</a>
+        </div>
+
+        <div class="card-opcao">
+            <div class="card-icone-wrapper">
+                <i class="fa-solid fa-arrow-up-from-bracket"></i>
+            </div>
+            <h3 class="card-titulo">Enviar Vídeo</h3>
+            <p class="card-descricao">
+                Faça upload de um vídeo de apresentação que você já gravou anteriormente em seu dispositivo.
+            </p>
+            <a href="{% url 'enviar_video' %}" class="botao btn-secundario">Enviar Vídeo</a>
+        </div>
+    </div>
+</main>
+{% endblock %}
